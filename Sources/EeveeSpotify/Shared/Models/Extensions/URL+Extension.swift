@@ -155,6 +155,32 @@ extension URL {
         return false
     }
 
+    /// Which kind of ad this is, or nil when it is not one. `isAdRelated` stays the gate; this only
+    /// says where the ad arrived, so the blocked-ad counter can report audio, banner and video
+    /// separately. Anything the matchers caught that does not look like a stream or a video host is
+    /// a banner, which is the common case.
+    var adKind: EeveeAdsBlockedKind? {
+        guard isAdRelated else { return nil }
+        let path = self.path.lowercased()
+        let host = (self.host ?? "").lowercased()
+
+        // In-stream and audio ad logic: the ad played between tracks.
+        if path.contains("/ad-logic/") || path.contains("in-stream") || path.contains("in_stream")
+            || path.contains("audio-ad") || path.contains("audioad")
+            || path.contains("streaming-ad") || path.contains("/esperanto/") {
+            return .audio
+        }
+
+        // Video and the third-party ad networks that carry it.
+        if path.contains("video") || path.contains("/dac/view/v1/")
+            || host.contains("doubleclick") || host.contains("googlesyndication")
+            || host == "ad.spotify.com" || host == "ads.spotify.com" || host.hasPrefix("aet.") {
+            return .video
+        }
+
+        return .banner
+    }
+
     // Additional session protection endpoints
     var isSessionInvalidation: Bool {
         self.path.contains("logout") || self.path.contains("sign-out") ||

@@ -42,6 +42,13 @@ enum SpotifyResponsePatcher {
         let elapsed = Date().timeIntervalSince(tweakInitTime)
         let path = url.path.lowercased()
 
+        // Count the ad before dropping it, and only it: the session-protection endpoints that share
+        // this branch are not ads and must not move the total. `noteOnce` de-dupes by URL because both
+        // hook paths (URLSession and DataLoader, request and response) ask this about the same one.
+        if let kind = url.adKind {
+            EeveeAdsBlocked.noteOnce(url, kind: kind)
+        }
+
         if url.isDeleteToken || url.isSessionInvalidation
             || path.contains("session/purge") || path.contains("token/revoke")
             || url.isAdRelated {

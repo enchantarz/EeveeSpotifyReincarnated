@@ -1,4 +1,9 @@
-TARGET := iphone:clang:latest:14.0
+# Deployment target is 16.0, not 14.0. The merge forces it three ways: the ported spoti.pw sources
+# came from a tweak built at iphone:clang:latest:16.0 and use iOS 15+ API (UIButtonConfiguration) on
+# unguarded paths; modules/libjamesdsp is compiled for arm64-apple-ios16.0 and linking it into a
+# 14.0 dylib is a min-version mismatch; and the Spotify builds this targets need iOS 16.1 or newer
+# anyway (Spotify 9.1.86 declares MinimumOSVersion 16.1), so nothing below 16.0 could load it.
+TARGET := iphone:clang:latest:16.0
 INSTALL_TARGET_PROCESSES = Spotify
 ARCHS = arm64
 
@@ -15,10 +20,23 @@ BRANCH_NAME_FINAL := $(if $(BRANCH_NAME),$(BRANCH_NAME),Master)
 $(shell mkdir -p Sources/EeveeSpotify/Generated)
 $(shell printf 'enum GeneratedConfig {\n    static let repoSlug = "%s"\n    static let branchName = "%s"\n}\n' "$(REPO_SLUG_FINAL)" "$(BRANCH_NAME_FINAL)" > Sources/EeveeSpotify/Generated/RepoSlug.swift)
 
-EeveeSpotify_FILES = $(shell find Sources/EeveeSpotify -name '*.swift') $(shell find Sources/EeveeSpotifyC -name '*.m' -o -name '*.c' -o -name '*.mm' -o -name '*.cpp')
+# spoti.pw sources were merged into Sources/EeveeSpotifyC (Objective-C/Logos) and
+# Sources/EeveeSpotify (Swift) at tag v0.21.1, the last GPL-3.0 release. Its own version
+# number is kept so the ported settings page can still show what it came from.
+EEVEE_SPOTIPW_VERSION := 0.21.1
+EEVEE_SPOTIPW_DEFS = -DEEVEE_SPOTIPW_VERSION=\"$(EEVEE_SPOTIPW_VERSION)\"
+
+EeveeSpotify_FILES = $(shell find Sources/EeveeSpotify -name '*.swift') $(shell find Sources/EeveeSpotifyC -name '*.m' -o -name '*.c' -o -name '*.mm' -o -name '*.cpp' -o -name '*.x' | sort)
 EeveeSpotify_SWIFTFLAGS = -ISources/EeveeSpotifyC/include -Osize
 EeveeSpotify_EXTRA_FRAMEWORKS = EeveeSwiftProtobuf
-EeveeSpotify_CFLAGS = -fobjc-arc -ISources/EeveeSpotifyC/include -Os
+# The ported sources reach their headers as "Core/EeveeCore.h", "Settings/EeveePage.h" and so
+# on, so Sources/EeveeSpotifyC has to be on the include path as well as its include/ dir.
+EeveeSpotify_CFLAGS = -fobjc-arc -ISources/EeveeSpotifyC/include -ISources/EeveeSpotifyC $(EEVEE_SPOTIPW_DEFS) -Os
+# Frameworks the ported UI needs (spoti.pw's tweak/Makefile list).
+EeveeSpotify_EXTRA_FRAMEWORKS += UIKit QuartzCore UniformTypeIdentifiers MediaPlayer CoreImage AudioToolbox AVFoundation CoreHaptics
+# ActivityKit + AppIntents back the ported Live Activity (Sources/EeveeSpotify/LiveActivity); the
+# widget half of it is the appex under LiveActivityExtension/, built by `make liveactivity`.
+EeveeSpotify_EXTRA_FRAMEWORKS += ActivityKit AppIntents
 
 # RootHide's compatibility implementation of libroot resolves jailbreak paths
 # through libroothide at runtime. Rootless builds continue to use libroot.
@@ -33,7 +51,46 @@ endif
 # handled out-of-process by modules/zxPluginsInject — LC-injected via ipapatch
 # in build-ipa-local.sh and the GitHub workflow. No flags needed here.
 
+# The ported JamesDSP engine (Shared/JamesDSP) is third-party C of its own: it builds into a
+# static library with its own flags out of modules/libjamesdsp, and is linked in as an object
+# file. Only Shared/JamesDSP/EeveeDSPEngine.m sees its headers.
+EEVEE_JDSP := modules/libjamesdsp
+EeveeSpotify_OBJ_FILES := $(EEVEE_JDSP)/build/ios/libjamesdsp.a
+Sources/EeveeSpotifyC/Shared/JamesDSP/EeveeDSPEngine.m_CFLAGS := \
+	-isystem $(EEVEE_JDSP)/subtree/Main/libjamesdsp/jni/jamesdsp/jdsp -isystem $(EEVEE_JDSP)
+
+# Spotify reads its remote-config flags by key; EeveeFlagList.m is the table of every one of them,
+# recovered from the decrypted IPA. It is not committed — run this once before the first build, and
+# again when the IPA changes.
+.PHONY: flags
+flags:
+	Scripts/extract-flags.py $(firstword $(wildcard ipa/*.ipa))
+
+# The Live Activity widget extension. It is a separate process WidgetKit only launches from inside
+# the host app's bundle, so it cannot ride in the .deb — `make ipa` puts it in the IPA.
+IPA ?= $(firstword $(wildcard ipa/*.ipa))
+
+.PHONY: liveactivity
+# The host Info.plist is unpacked to a file rather than handed over with a process substitution:
+# make runs recipes with /bin/sh, which has none.
+liveactivity:
+	@mkdir -p out
+	unzip -p $(IPA) 'Payload/Spotify.app/Info.plist' > out/host-Info.plist
+	Scripts/build-liveactivity.sh out/host-Info.plist out/liveactivity
+
+# The tweak and the widget in one decrypted IPA: out/EeveeSpotify-Merged.ipa, unsigned.
+.PHONY: ipa
+ipa:
+	Scripts/build-merged-ipa.sh $(IPA) out/EeveeSpotify-Merged.ipa
+
 include $(THEOS_MAKE_PATH)/tweak.mk
+
+# The library is brought up to date before the tweak builds, so the link finds it current.
+EeveeSpotify.all.tweak.variables: eevee-libjamesdsp
+.PHONY: eevee-libjamesdsp
+# You have to agree to the GPL-2 engine's terms to build it: see modules/libjamesdsp/LICENSE.
+eevee-libjamesdsp:
+	@$(MAKE) --no-print-directory -C $(EEVEE_JDSP) JDSP_PLATFORM=ios
 
 internal-stage::
 	# Bundle EeveeSwiftProtobuf.framework into the package. Renamed from

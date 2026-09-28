@@ -104,6 +104,8 @@ class HubsAdBlocker: ClassHook<NSObject> {
         var result = [[String: Any]]()
         for var component in components {
             if isAdComponent(component) {
+                // A component taken out of a feed body is a banner or card the page would have drawn.
+                EeveeAdsBlocked.note(.banner)
                 continue
             }
             if let children = component["children"] as? [[String: Any]] {
@@ -134,6 +136,7 @@ class HubsAdBlocker: ClassHook<NSObject> {
         // Filter "header" component
         if var header = mutableDict["header"] as? [String: Any] {
             if isAdComponent(header) {
+                EeveeAdsBlocked.note(.banner)
                 mutableDict.removeValue(forKey: "header")
             } else {
                 if let children = header["children"] as? [[String: Any]] {

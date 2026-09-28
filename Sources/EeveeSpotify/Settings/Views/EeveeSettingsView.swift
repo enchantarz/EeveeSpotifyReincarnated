@@ -32,7 +32,7 @@ struct EeveeSettingsView: View {
         )
         navigationController.pushViewController(viewController, animated: true)
     }
-    
+
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
         UIView.appearance().tintColor = UIColor(EeveeSettingsView.spotifyAccentColor)
@@ -50,101 +50,148 @@ struct EeveeSettingsView: View {
                     }
                 )
             }
-            
-            //
-            
-            Button {
-                pushSettingsController(
-                    with: EeveePatchingSettingsView(),
-                    title: "patching".localized
-                )
-            } label: {
-                NavigationSectionView(
-                    color: .orange,
-                    title: "patching".localized,
-                    imageSystemName: "hammer.fill"
-                )
-            }
-            
-            Button {
-                pushSettingsController(
-                    with: EeveeLyricsSettingsView(),
-                    title: "lyrics".localized
-                )
-            } label: {
-                NavigationSectionView(
-                    color: .blue,
-                    title: "lyrics".localized,
-                    imageSystemName: "quote.bubble.fill"
-                )
-            }
-            
-            Button {
-                pushSettingsController(
-                    with: EeveeUISettingsView(),
-                    title: "customization".localized
-                )
-            } label: {
-                NavigationSectionView(
-                    color: Color(hex: "#64D2FF"),
-                    title: "customization".localized,
-                    imageSystemName: "paintpalette.fill"
-                )
-            }
-            
-            Button {
-                pushSettingsController(
-                    with: EeveeExperimentsSettingsView(),
-                    title: "experiments".localized
-                )
-            } label: {
-                NavigationSectionView(
-                    color: .purple,
-                    title: "experiments".localized,
-                    imageSystemName: "sparkle"
-                )
+
+            // MARK: - 1. EeveeSpotify Features
+            // Premium interception, data overrides and the patching that backs them, plus the rest of
+            // what EeveeSpotify adds on its own.
+            Section(header: Text("EeveeSpotify Features")) {
+                Button {
+                    pushSettingsController(
+                        with: EeveePatchingSettingsView(),
+                        title: "patching".localized
+                    )
+                } label: {
+                    NavigationSectionView(
+                        color: .orange,
+                        title: "patching".localized,
+                        imageSystemName: "hammer.fill"
+                    )
+                }
+
+                Button {
+                    pushSettingsController(
+                        with: SponsorBlockSettingsView(),
+                        title: "sponsorblock".localized
+                    )
+                } label: {
+                    NavigationSectionView(
+                        color: .red,
+                        title: "sponsorblock".localized,
+                        imageSystemName: "forward.end.fill"
+                    )
+                }
+
+                Button {
+                    pushSettingsController(
+                        with: EeveeExperimentsSettingsView(),
+                        title: "experiments".localized
+                    )
+                } label: {
+                    NavigationSectionView(
+                        color: .purple,
+                        title: "experiments".localized,
+                        imageSystemName: "sparkle"
+                    )
+                }
+
+                Button {
+                    pushSettingsController(
+                        with: EeveeMiscellaneousSettingsView(),
+                        title: "miscellaneous".localized
+                    )
+                } label: {
+                    NavigationSectionView(
+                        color: .gray,
+                        title: "miscellaneous".localized,
+                        imageSystemName: "ellipsis.circle.fill"
+                    )
+                }
             }
 
-            Button {
-                pushSettingsController(
-                    with: SponsorBlockSettingsView(),
-                    title: "sponsorblock".localized
-                )
-            } label: {
-                NavigationSectionView(
-                    color: .red,
-                    title: "sponsorblock".localized,
-                    imageSystemName: "forward.end.fill"
-                )
+            // MARK: - 2. UI & Liquid Glass Adjustments
+            // EeveeSpotify's own customisation, then the ported spoti.pw tree: its layout pages
+            // (Navbar, Player, Home & Library, audio effects) and the app icon.
+            Section(header: Text("UI & Liquid Glass Adjustments")) {
+                Button {
+                    pushSettingsController(
+                        with: EeveeUISettingsView(),
+                        title: "customization".localized
+                    )
+                } label: {
+                    NavigationSectionView(
+                        color: Color(hex: "#64D2FF"),
+                        title: "customization".localized,
+                        imageSystemName: "paintpalette.fill"
+                    )
+                }
+
+                // The ported page is a UIKit tree (~1,300 lines of it) hosted as-is rather than
+                // rebuilt in SwiftUI; its sub-pages push onto this same navigation stack. The row is
+                // named for where its options came from rather than for a look: the Liquid Glass
+                // redesign it was written for is not part of this build, so its pages are the native
+                // look's (EeveeSpotifyC/Core/EeveeUIMode.h).
+                Button {
+                    pushSettingsController(
+                        with: EeveeSpotipwPageHost(),
+                        title: "spoti.pw features"
+                    )
+                } label: {
+                    NavigationSectionView(
+                        color: Color(hex: "#64D2FF"),
+                        title: "spoti.pw features",
+                        imageSystemName: "sparkles"
+                    )
+                }
+
+                Button {
+                    pushSettingsController(
+                        with: EeveeAppIconPickerView(),
+                        title: "appIcon".localized
+                    )
+                } label: {
+                    NavigationSectionView(
+                        color: .pink,
+                        title: "appIcon".localized,
+                        imageSystemName: "app.badge.fill"
+                    )
+                }
             }
 
-            Button {
-                pushSettingsController(
-                    with: EeveeAppIconPickerView(),
-                    title: "appIcon".localized
-                )
-            } label: {
-                NavigationSectionView(
-                    color: .pink,
-                    title: "appIcon".localized,
-                    imageSystemName: "app.badge.fill"
-                )
+            // MARK: - 3. Lyrics Settings
+            // EeveeSpotify's own engine only: LRCLIB, Genius, Musixmatch and PetitLyrics. The
+            // lyrics engine spoti.pw shipped was removed in the merge.
+            Section(header: Text("Lyrics Settings")) {
+                Button {
+                    pushSettingsController(
+                        with: EeveeLyricsSettingsView(),
+                        title: "lyrics".localized
+                    )
+                } label: {
+                    NavigationSectionView(
+                        color: .blue,
+                        title: "lyrics".localized,
+                        imageSystemName: "quote.bubble.fill"
+                    )
+                }
             }
 
-            Button {
-                pushSettingsController(
-                    with: EeveeMiscellaneousSettingsView(),
-                    title: "miscellaneous".localized
-                )
-            } label: {
-                NavigationSectionView(
-                    color: .gray,
-                    title: "miscellaneous".localized,
-                    imageSystemName: "ellipsis.circle.fill"
-                )
+            // MARK: - 4. Ad Blocking & Statistics
+            Section(header: Text("Ad Blocking & Statistics")) {
+                Button {
+                    pushSettingsController(
+                        with: EeveeAdBlockingSettingsView(),
+                        title: "Ad Blocking"
+                    )
+                } label: {
+                    NavigationSectionView(
+                        color: .green,
+                        title: "Ads Blocked So Far",
+                        imageSystemName: "hand.raised.fill"
+                    )
+                }
             }
 
-            //
+            // MARK: - Help
 
             Section {
                 Button {
@@ -152,7 +199,7 @@ struct EeveeSettingsView: View {
                 } label: {
                     HStack {
                         Image(systemName: "person.fill.questionmark")
-                        Text("\("developer_note".localized)...")
+                        Text("developer_note".localized)
                     }
                 }
             }

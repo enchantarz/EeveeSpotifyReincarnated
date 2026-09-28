@@ -9,6 +9,14 @@ private func upsellServiceLog(_ message: String) {
     NSLog("[EeveeSpotify][UpsellService] %@", message)
 }
 
+/// Every one of these hooks suppresses a Premium upsell the app would have presented, so each counts
+/// as one banner the ad blocking stopped. Kept in one place so nothing gets counted that was only
+/// logged, and so the counter and the log line can never disagree.
+private func suppressUpsell(_ label: String) {
+    EeveeAdsBlocked.note(.banner)
+    upsellServiceLog("suppressed \(label)")
+}
+
 struct GeneralUpsellsServiceGroup: HookGroup {}
 struct PremiumUpsellServiceGroup: HookGroup {}
 struct ContextualPremiumPromoServiceGroup: HookGroup {}
@@ -24,7 +32,7 @@ class GeneralUpsellsServiceKill: ClassHook<NSObject> {
     static let targetName = "_TtC19Upsells_ServiceImpl18UpsellsServiceImpl"
 
     func load() {
-        upsellServiceLog("suppressed UpsellsServiceImpl.load")
+        suppressUpsell("UpsellsServiceImpl.load")
         return
     }
 }
@@ -34,7 +42,7 @@ class PremiumUpsellServiceKill: ClassHook<NSObject> {
     static let targetName = "_TtC31PremiumUpsell_UpsellServiceImpl17UpsellServiceImpl"
 
     func load() {
-        upsellServiceLog("suppressed Premium UpsellServiceImpl.load")
+        suppressUpsell("Premium UpsellServiceImpl.load")
         return
     }
 }
@@ -45,7 +53,7 @@ class ContextualPremiumPromoServiceKill: ClassHook<NSObject> {
         "_TtC45ReinventFree_ContextualUpsellPremiumPromoImpl39ContextualUpsellPremiumPromoServiceImpl"
 
     func load() {
-        upsellServiceLog("suppressed ContextualUpsellPremiumPromoServiceImpl.load")
+        suppressUpsell("ContextualUpsellPremiumPromoServiceImpl.load")
         return
     }
 }
@@ -56,7 +64,7 @@ class ReferralsUpsellCardServiceKill: ClassHook<NSObject> {
         "_TtC40Referrals_ReferralsUpsellCardElementImpl37ReferralsUpsellCardElementServiceImpl"
 
     func load() {
-        upsellServiceLog("suppressed ReferralsUpsellCardElementServiceImpl.load")
+        suppressUpsell("ReferralsUpsellCardElementServiceImpl.load")
         return
     }
 }
@@ -69,7 +77,7 @@ class DownloadUpsellServiceKill: ClassHook<NSObject> {
     static let targetName = "_TtC31ReinventFree_DownloadUpsellImpl21DownloadUpsellService"
 
     func load() {
-        upsellServiceLog("suppressed DownloadUpsellService.load")
+        suppressUpsell("DownloadUpsellService.load")
         return
     }
 }
@@ -80,7 +88,7 @@ class FreeHostedJamsUpsellServiceKill: ClassHook<NSObject> {
         "_TtC28Jam_FreeHostedJamsUpsellImpl31FreeHostedJamsUpsellServiceImpl"
 
     func load() {
-        upsellServiceLog("suppressed FreeHostedJamsUpsellServiceImpl.load")
+        suppressUpsell("FreeHostedJamsUpsellServiceImpl.load")
         return
     }
 }
@@ -91,7 +99,7 @@ class FreeUserSkipUpsellPageServiceKill: ClassHook<NSObject> {
         "_TtC30Jam_FreeUserSkipUpsellPageImpl29FreeUserSkipUpsellPageService"
 
     func load() {
-        upsellServiceLog("suppressed FreeUserSkipUpsellPageService.load")
+        suppressUpsell("FreeUserSkipUpsellPageService.load")
         return
     }
 }
@@ -102,7 +110,7 @@ class FreeUserShuffleUpsellPageServiceKill: ClassHook<NSObject> {
         "_TtC38Jam_FreeUserShuffleUpsellSheetPageImpl37FreeUserShuffleUpsellSheetPageService"
 
     func load() {
-        upsellServiceLog("suppressed FreeUserShuffleUpsellSheetPageService.load")
+        suppressUpsell("FreeUserShuffleUpsellSheetPageService.load")
         return
     }
 }
@@ -118,7 +126,7 @@ class SelfLoadingUpsellBannerViewKill: ClassHook<UIView> {
         target.isHidden = true
         target.isUserInteractionEnabled = false
         if target.superview != nil {
-            upsellServiceLog("suppressed SelfLoadingUpsellBannerUIView")
+            suppressUpsell("SelfLoadingUpsellBannerUIView")
             target.removeFromSuperview()
         }
     }

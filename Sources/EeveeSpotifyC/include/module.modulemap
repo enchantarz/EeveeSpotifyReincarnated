@@ -1,4 +1,12 @@
+// The headers the Swift side sees, listed one by one rather than with `umbrella "."`.
+//
+// A directory umbrella hides which headers the module contains: Clang cannot record them as
+// dependencies, so a header added here is not noticed and the cached module is reused, leaving the
+// new declarations invisible to Swift (they fail with "cannot find ... in scope" even though the
+// module imports). Naming each header makes it a tracked dependency, so adding one invalidates the
+// module the way it should — which is exactly what happened when EeveeSpotipw.h was added.
 module EeveeSpotifyC {
-    umbrella "."
+    header "Tweak.h"
+    header "EeveeSpotipw.h"
     export *
 }

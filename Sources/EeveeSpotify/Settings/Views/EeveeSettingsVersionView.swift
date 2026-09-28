@@ -56,7 +56,7 @@ struct EeveeSettingsVersionView: View {
                     }
                 }
                 else {
-                    Button("\("contributors".localized)...") {
+                    Button("contributors".localized) {
                         isPresentingContributorsSheet = true
                     }
                     .foregroundColor(.gray)

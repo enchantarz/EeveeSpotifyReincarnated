@@ -24,6 +24,12 @@ Outputs/
 
 wrapper/
 
+# Generated from the decrypted IPA by Scripts/extract-flags.py (make flags)
+Sources/EeveeSpotifyC/Shared/Flags/EeveeFlagList.m
+
+# libjamesdsp static library build outputs
+modules/libjamesdsp/build/
+
 # zxPluginsInject build outputs
 modules/zxPluginsInject/.theos/
 modules/zxPluginsInject/packages/
