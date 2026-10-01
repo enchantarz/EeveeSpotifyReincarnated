@@ -47,7 +47,9 @@ LRCLIB: The most open service, offering time-synced lyrics. However, it lacks ly
 
 Musixmatch: The service Spotify uses. Provides time-synced lyrics for many songs, but you'll need a user token to use this source.";
 lyrics_additional_info = "If EeveeSpotify is unable to find a song or process the lyrics, you'll see a \"Couldn't load the lyrics for this song\" message. The lyrics might be wrong for some songs when using Genius due to how the tweak searches songs. I've made it work in most cases.";
-spicylyrics_description = "SpicyLyrics provides word-by-word karaoke lyrics using Spotify's own token. No extra setup needed.";
+spicylyrics_description = "SpicyLyrics provides word-by-word karaoke lyrics.";
+spicylyrics_key_missing = "No SpicyLyrics API Key";
+spicylyrics_key_invalid = "SpicyLyrics API Key Rejected";
 petitlyrics_description = "PetitLyrics: Offers plenty of time-synced Japanese and some international lyrics.";
 
 musixmatch_user_token = "Musixmatch User Token";
@@ -70,7 +72,7 @@ romanized_lyrics_description = "Display romanized lyrics for Japanese, Korean, a
 musixmatch_language = "Musixmatch Lyrics Language";
 musixmatch_language_description = "You can enter a 2-letter Musixmatch language code and see translated lyrics on Musixmatch if they are available.";
 
-karaoke_word_synced_button = "Word-Synced";
+karaoke_word_synced_button = "Custom Lyrics view";
 
 // UI
 
@@ -86,6 +88,7 @@ static_color = "Static Color";
 
 color_normalization_factor = "Color Normalization Factor";
 dark_popups = "Dark PopUps";
+amoled_theme = "AMOLED Black Theme";
 
 // Experiments
 
@@ -102,6 +105,12 @@ miscellaneous = "Miscellaneous";
 
 clean_share_links = "Clean Share Links";
 clean_share_links_description = "Removes the \"si\" tracking parameter from shared Spotify links, so they don't reveal which device or account the link came from.";
+
+hide_jam_from_menu = "Hide Jam from Menu";
+hide_jam_from_menu_description = "Removes \"Start a Jam\" from track/playlist context menus, the device picker, and the queue.";
+
+block_rating_dialogs = "Block App Rating Dialogs";
+block_rating_dialogs_description = "Suppresses App Store star rating prompts and in-app review requests.";
 
 /* MARK: Premium PopUps */
 
@@ -143,6 +152,8 @@ liked_songs = "Liked songs";
 
 contributors = "Contributors";
 developer_note = "Developer's Note";
+hysan_recovery_fund = "Hysan's Elsa Recovery Fund";
+hysan_recovery_fund_description = "Hysan has had a crush on Elsa since 2026 and will not stop talking about it. Every coffee here funds his recovery — and the mod. ☕";
 
 request_anonymous_token = "Request Anonymous Token";
 request_anonymous_token_description = "Tap “Request Anonymous Token” to request a token from Musixmatch without authorization.";
@@ -300,3 +311,7 @@ managingSegmentsSectionDeps2 = "Settings → 'Reporting & drafts' holds your in-
 categoriesTitle = "Categories";
 categoriesSectionTitle1 = "Per-category actions";
 categoriesSectionDeps1 = "Off = ignore. Show = draw on the bar only. Manual = prompt before skipping. Auto = skip silently.";
+
+// Ported features: the SpicyLyrics karaoke view, the AMOLED black theme, the Jam/rating
+// toggles, Hysan's recovery fund, and the app-icon picker.
+appIconUnavailableMessage = "This Spotify was installed from the App Store, so iOS keeps its Home Screen icon inside the app's signed bundle and won't let the mod change it. Install a patched IPA build of EeveeSpotify — signed with the icons registered — and switching works.";

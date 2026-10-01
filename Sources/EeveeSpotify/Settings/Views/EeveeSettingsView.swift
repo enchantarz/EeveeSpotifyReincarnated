@@ -1,5 +1,6 @@
 import SwiftUI
 import UIKit
+import EeveeSpotifyC
 
 struct EeveeSettingsView: View {
     let navigationController: UINavigationController
@@ -125,14 +126,16 @@ struct EeveeSettingsView: View {
                     )
                 }
 
-                // The ported page is a UIKit tree (~1,300 lines of it) hosted as-is rather than
-                // rebuilt in SwiftUI; its sub-pages push onto this same navigation stack. The row is
-                // named for where its options came from rather than for a look: the Liquid Glass
-                // redesign it was written for is not part of this build, so its pages are the native
-                // look's (EeveeSpotifyC/Core/EeveeUIMode.h).
+                // The ported page is drawn by EeveeModPageView in SwiftUI, from the same kind of
+                // data EeveeSpotify's own pages are written as; only the ported pages whose
+                // controls SwiftUI has no shape for stay UIKit, and those are pushed as they are.
+                // Its sub-pages push onto this same navigation stack. The row is named for where its
+                // options came from rather than for a look: the Liquid Glass redesign it was written
+                // for is not part of this build, so its pages are the native look's
+                // (EeveeSpotifyC/Core/EeveeUIMode.h).
                 Button {
                     pushSettingsController(
-                        with: EeveeSpotipwPageHost(),
+                        with: EeveeSpotipwSettingsView(navigationController: navigationController),
                         title: "spoti.pw features"
                     )
                 } label: {
@@ -205,6 +208,27 @@ struct EeveeSettingsView: View {
             }
             .sheet(isPresented: $isPresentingDevNoteSheet) {
                 EeveeDevNoteView()
+            }
+
+            // The donation easter egg (a toast on the 5th launch) is gone; this is the same joke,
+            // where it can be found on purpose. Hysan's crush on Elsa funds the mod, allegedly.
+            Section {
+                Button {
+                    if let url = URL(string: "https://ko-fi.com/jaydenjcpy") {
+                        UIApplication.shared.open(url)
+                    }
+                } label: {
+                    HStack(alignment: .top, spacing: 10) {
+                        Image(systemName: "cup.and.saucer.fill")
+                            .foregroundColor(Color(hex: "#FF99CC"))
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("hysan_recovery_fund".localized)
+                            Text("hysan_recovery_fund_description".localized)
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                        }
+                    }
+                }
             }
 
             Section(header: Text("debug_title".localized), footer: Text("debug_section_footer".localized)) {

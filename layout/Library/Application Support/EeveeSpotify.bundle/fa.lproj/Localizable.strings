@@ -286,3 +286,18 @@ managingSegmentsSectionDeps2 = "در مسیر تنظیمات ← «گزارش‌
 categoriesTitle = "دسته‌بندی‌ها";
 categoriesSectionTitle1 = "عملکرد هر دسته‌بندی";
 categoriesSectionDeps1 = "خاموش = نادیده گرفتن. نمایش = فقط روی نوار نمایش داده شود. دستی = قبل از رد کردن سؤال شود. خودکار = بدون نمایش پیام به‌صورت خودکار رد شود.";
+
+// Ported features: the SpicyLyrics karaoke view, the AMOLED black theme, the Jam/rating
+// toggles, Hysan's recovery fund, and the app-icon picker.
+spicylyrics_description = "SpicyLyrics متن کارائوئه کلمه‌به‌کلمه ارائه می‌دهد.";
+spicylyrics_key_missing = "کلید API اسپایسی‌لیریکس وجود ندارد";
+spicylyrics_key_invalid = "کلید API اسپایسی‌لیریکس رد شد";
+karaoke_word_synced_button = "نمای متن سفارشی";
+amoled_theme = "تم سیاه AMOLED";
+hide_jam_from_menu = "مخفی کردن Jam از منو";
+hide_jam_from_menu_description = "گزینه «شروع Jam» را از منوهای متنی آهنگ/پلی‌لیست، انتخابگر دستگاه و صف حذف می‌کند.";
+block_rating_dialogs = "مسدود کردن پنجره‌های امتیازدهی";
+block_rating_dialogs_description = "درخواست‌های ستاره‌دهی اپ استور و درخواست‌های بازخورد درون‌برنامه‌ای را سرکوب می‌کند.";
+hysan_recovery_fund = "صندوق بهبودی السای هیسان";
+hysan_recovery_fund_description = "هیسان از سال ۲۰۲۶ عاشق الساست و مدام درباره‌اش حرف می‌زند. هر قهوه اینجا هزینه بهبودی او — و مود — را تأمین می‌کند. ☕";
+appIconUnavailableMessage = "این اسپاتیفای از اپ استور نصب شده، بنابراین iOS آیکون صفحه اصلی را درون بسته امضاشده برنامه نگه می‌دارد و اجازه تغییر به مود نمی‌دهد. نسخه IPA وصله‌شده EeveeSpotify را نصب کنید — با آیکون‌های ثبت‌شده امضا شده — و تغییر کار می‌کند.";

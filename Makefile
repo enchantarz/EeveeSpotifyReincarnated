@@ -27,7 +27,10 @@ EEVEE_SPOTIPW_VERSION := 0.21.1
 EEVEE_SPOTIPW_DEFS = -DEEVEE_SPOTIPW_VERSION=\"$(EEVEE_SPOTIPW_VERSION)\"
 
 EeveeSpotify_FILES = $(shell find Sources/EeveeSpotify -name '*.swift') $(shell find Sources/EeveeSpotifyC -name '*.m' -o -name '*.c' -o -name '*.mm' -o -name '*.cpp' -o -name '*.x' | sort)
-EeveeSpotify_SWIFTFLAGS = -ISources/EeveeSpotifyC/include -Osize
+# Sources/EeveeSpotifyC itself is on the Swift path as well as its include/: the SwiftUI renderer of
+# the ported pages (Settings/Sections/Spotipw/Views/EeveeModPageView.swift) reads the row model out
+# of Settings/EeveeModPage.h, which the tree reaches as "Settings/EeveePage.h" and "Core/...".
+EeveeSpotify_SWIFTFLAGS = -ISources/EeveeSpotifyC/include -ISources/EeveeSpotifyC -Osize
 EeveeSpotify_EXTRA_FRAMEWORKS = EeveeSwiftProtobuf
 # The ported sources reach their headers as "Core/EeveeCore.h", "Settings/EeveePage.h" and so
 # on, so Sources/EeveeSpotifyC has to be on the include path as well as its include/ dir.
@@ -49,7 +52,7 @@ endif
 
 # Sideload compatibility (keychain redirect, group containers, CloudKit) is
 # handled out-of-process by modules/zxPluginsInject — LC-injected via ipapatch
-# in build-ipa-local.sh and the GitHub workflow. No flags needed here.
+# in Scripts/build-merged-ipa.sh and the GitHub workflow. No flags needed here.
 
 # The ported JamesDSP engine (Shared/JamesDSP) is third-party C of its own: it builds into a
 # static library with its own flags out of modules/libjamesdsp, and is linked in as an object
@@ -111,6 +114,12 @@ internal-stage::
 		-o $(THEOS_OBJ_DIR)/KaraokeBackgroundShader.air
 	xcrun -sdk iphoneos metallib $(THEOS_OBJ_DIR)/KaraokeBackgroundShader.air \
 		-o $(THEOS_STAGING_DIR)/Library/MobileSubstrate/DynamicLibraries/KaraokeBackgroundShader.metallib
+	# The alternate app icons ride in the tweak bundle: on a jailbreak install the app bundle is
+	# stock (its Info.plist has no CFBundleAlternateIcons), so the icon picker reaches for the
+	# choices here. Tools/alt-icons.sh is what registers them into a built IPA, where iOS's own
+	# alternate-icon switcher can use them (see Scripts/build-merged-ipa.sh).
+	mkdir -p "$(THEOS_STAGING_DIR)/Library/Application Support/EeveeSpotify.bundle/AppIcons"
+	cp -f Assets/AppIcon/*.png "$(THEOS_STAGING_DIR)/Library/Application Support/EeveeSpotify.bundle/AppIcons/"
 
 # Build EeveeSwiftProtobuf.framework from apple/swift-protobuf source. Run
 # this once before `make package`. Re-run if SWIFTPROTOBUF_VERSION changes

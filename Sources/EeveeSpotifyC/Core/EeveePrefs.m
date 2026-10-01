@@ -47,8 +47,3 @@ void EeveeMigrateKey(NSString *from, NSString *to) {
     [store setObject:value forKey:to];
     [store removeObjectForKey:from];
 }
-
-void EeveeRestartSpotify(void) {
-    [NSUserDefaults.standardUserDefaults synchronize];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{ exit(0); });
-}

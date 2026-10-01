@@ -136,3 +136,24 @@ play_songs_in_any_order = "Musik in beliebiger Reihenfolge abspielen";
 organize_listening_queue = "Wiedergabeliste anpassen";
 payment_notice = "EeveeSpotify wendet Patches an, um bestimmte Premium-Funktionen freizuschalten. Es ist kostenlos.";
  
+
+// Ported features: the SpicyLyrics karaoke view, the AMOLED black theme, the Jam/rating
+// toggles, Hysan's recovery fund, and the app-icon picker.
+spicylyrics_description = "SpicyLyrics bietet Karaoke-Lyrics Wort für Wort.";
+spicylyrics_key_missing = "Keine SpicyLyrics-API-Key";
+spicylyrics_key_invalid = "SpicyLyrics-API-Key abgelehnt";
+karaoke_word_synced_button = "Eigene Lyrics-Ansicht";
+amoled_theme = "AMOLED-Schwarz-Design";
+hide_jam_from_menu = "Jam im Menü ausblenden";
+hide_jam_from_menu_description = "Entfernt \"Eine Jam starten\" aus den Kontextmenüs von Titel/Playlist, der Geräteauswahl und der Warteschlange.";
+block_rating_dialogs = "App-Bewertungsdialoge blockieren";
+block_rating_dialogs_description = "Unterdrückt Sterne-Bewertungsaufrufe des App Stores und In-App-Review-Anfragen.";
+hysan_recovery_fund = "Hysans Elsa-Genesungsfond";
+hysan_recovery_fund_description = "Hysan ist seit 2026 in Elsa verliebt und redet über nichts anderes. Jeder Kaffee hier finanziert seine Genesung — und den Mod. ☕";
+appIconTitle = "Symbol wählen";
+appIconSubtitle = "iOS zeigt beim ersten Mal eine Bestätigung. Der Home-Bildschirm braucht eventuell ein paar Sekunden zum Aktualisieren.";
+appIconUnavailableMessage = "Dieses Spotify wurde aus dem App Store installiert, deshalb behält iOS sein Home-Bildschirm-Symbol innerhalb der signierten App und lässt den Mod es nicht ändern. Installiere ein gepatchtes IPA von EeveeSpotify — mit registrierten Symbolen signiert — dann funktioniert der Wechsel.";
+iconSelected = "Ausgewählt";
+iconTapToApply = "Zum Anwenden tippen";
+prettifyIconNames = "Symbolnamen verschönern";
+prettifyIconNamesDescription = "Macht aus Unterstrichen, Bindestrichen und CamelCase Leerzeichen";

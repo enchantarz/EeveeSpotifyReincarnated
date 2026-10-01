@@ -1,21 +1,15 @@
 EeveeSpotify Version Update Locations
 =====================================
 
-When bumping the version, update these 3 files:
+When bumping the version, update these 2 files:
 
 1. control
    - Line 3: Version: X.X.X
    - Example: Version: 6.4.5
 
 2. Sources/EeveeSpotify/Tweak.x.swift
-   - Line 62: static let version = "X.X.X"
-   - Example: static let version = "6.4.5"
+   - static let version = "X.X.X"
 
-3. build-ipa-local.sh
-   - Line 8: VERSION="X.X.X"
-   - Example: VERSION="6.4.5"
-
-All three must match for consistent versioning across:
-- .deb packages (control)
-- Tweak runtime (Tweak.x.swift)
-- IPA builds (build-ipa-local.sh)
+Both must match for consistent versioning across the .deb package (control) and
+the tweak's runtime version (Tweak.x.swift). The IPA pipelines read the version
+straight from control, so they need nothing per bump.

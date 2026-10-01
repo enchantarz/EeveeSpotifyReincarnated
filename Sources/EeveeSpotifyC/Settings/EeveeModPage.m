@@ -1,21 +1,9 @@
-#import <CoreText/SFNTLayoutTypes.h>
 #import "EeveeModPage.h"
 #import "EeveePageStyle.h"
-#import "EeveeGlowSwitch.h"
 #import "Core/EeveeCore.h"
 
 NSString *const EeveeRestartNote = @"Changes apply after you restart Spotify.";
 NSString *const EeveeSpotipwRowSuffix = @" (from spoti.pw)";
-
-// A row is a preference when it carries a key (a switch, a flag or a choice) or a number (a slider).
-// Page rows, stat rows and plain actions are navigation or readouts, so they keep their titles.
-// Applied here, once, rather than at the ~200 places rows are built: every ported option is
-// covered, and none can be missed as rows are added.
-static NSString *labelledTitle(EeveeModRow *row) {
-    if ((!row.key && !row.number) || !row.title) return row.title;
-    if ([row.title hasSuffix:EeveeSpotipwRowSuffix]) return row.title;
-    return [row.title stringByAppendingString:EeveeSpotipwRowSuffix];
-}
 
 @implementation EeveeModRow
 @end
@@ -42,14 +30,6 @@ EeveeModRow *EeveeHideRow(NSString *title, NSString *subtitle, NSString *key) {
 EeveeModRow *EeveeOptionRow(NSString *title, NSString *subtitle, NSString *key) {
     EeveeModRow *row = EeveeSwitchRow(title, subtitle, key);
     row.defaultOn = NO;
-    return row;
-}
-
-// A switch whose work is not finished: turning it on says so first, and offers the repo to anyone
-// who would rather fix it than live with it.
-EeveeModRow *EeveeUnstableRow(NSString *title, NSString *subtitle, NSString *key, NSString *warning) {
-    EeveeModRow *row = EeveeSwitchRow(title, subtitle, key);
-    row.warning = warning;
     return row;
 }
 
@@ -81,15 +61,7 @@ EeveeModRow *EeveeActionRow(NSString *title, NSString *subtitle, void (^action)(
     return row;
 }
 
-// Red, with a warning symbol. EeveeFillCell tints the title and the symbol; the cell below takes the
-// colour down to the subtitle too, so the whole row reads as the warning it is.
-EeveeModRow *EeveeWarningRow(NSString *title, NSString *subtitle, void (^action)(void)) {
-    EeveeModRow *row = EeveeActionRow(title, subtitle, action);
-    row.color = EeveeRed();
-    row.symbol = @"exclamationmark.triangle.fill";
-    return row;
-}
-
+// Red, with a warning symbol: something is wrong and tapping the row says what to do about it.
 // No subtitle: a list of pages reads as a list, not as a wall of explanations.
 EeveeModRow *EeveePageRow(NSString *title, UIViewController *(^page)(void)) {
     EeveeModRow *row = [EeveeModRow new];
@@ -98,100 +70,18 @@ EeveeModRow *EeveePageRow(NSString *title, UIViewController *(^page)(void)) {
     return row;
 }
 
-// The list a choice row opens: the names it was given, each over its note where it has one, a green
-// checkmark against the one set. Picking one writes the index, tells the row, and goes back, where the row
-// it came from reads the new name out and the page it sits on rebuilds around it.
-@interface EeveeChoicePage : EeveePage
-- (instancetype)initWithTitle:(NSString *)title key:(NSString *)key choices:(NSArray<NSString *> *)choices notes:(NSArray<NSString *> *)notes
-                       footer:(NSString *)footer fallback:(NSInteger)fallback chosen:(void (^)(NSInteger index))chosen;
-@end
-
-@implementation EeveeChoicePage {
-    NSString *_key;
-    NSArray<NSString *> *_choices, *_notes;
-    NSInteger _fallback;
-    void (^_chosen)(NSInteger index);
-    UIView *_footer;
-}
-
-- (instancetype)initWithTitle:(NSString *)title key:(NSString *)key choices:(NSArray<NSString *> *)choices notes:(NSArray<NSString *> *)notes
-                       footer:(NSString *)footer fallback:(NSInteger)fallback chosen:(void (^)(NSInteger index))chosen {
-    if (!(self = [super initWithStyle:UITableViewStyleInsetGrouped])) return nil;
-    self.title = title;
-    _key = key;
-    _choices = choices;
-    _notes = notes;
-    _fallback = fallback;
-    _chosen = chosen;
-    _footer = footer ? EeveeNote(footer) : nil;
-    return self;
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.tableView.tableFooterView = _footer;
-}
-
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    if (_footer) EeveeFitNote(self.tableView, _footer, 16, 24);
-}
-
-
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-    EeveeInsetForBars(self.tableView);
-}
-
-- (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
-    return (NSInteger)_choices.count;
-}
-
-- (CGFloat)tableView:(UITableView *)table heightForHeaderInSection:(NSInteger)section {
-    return CGFLOAT_MIN;
-}
-
-- (CGFloat)tableView:(UITableView *)table heightForFooterInSection:(NSInteger)section {
-    return CGFLOAT_MIN;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)table cellForRowAtIndexPath:(NSIndexPath *)path {
-    UITableViewCell *cell = EeveeDequeueCell(table, @"choice");
-    NSUInteger index = (NSUInteger)path.row;
-    EeveeFillCell(cell, _choices[index], index < _notes.count ? _notes[index] : nil, nil, nil);
-    cell.selectionStyle = UITableViewCellSelectionStyleDefault;
-    if (path.row == EeveeInt(_key, _fallback)) {
-        UIImageView *tick = EeveeSymbolView(@"checkmark", 13, UIImageSymbolWeightSemibold, 16);
-        tick.tintColor = EeveeGreen();
-        cell.accessoryView = tick;
-    }
-    return cell;
-}
-
-- (void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)path {
-    [table deselectRowAtIndexPath:path animated:NO];
-    EeveeSetInt(_key, path.row);
-    if (_chosen) _chosen(path.row);
-    [table reloadData];
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-@end
-
 // No key on the row: the key lives in the blocks, so the page draws the row as the link it is
-// rather than as a switch. The notes and the callback are read off the row when its list opens, so they
-// can be set after this returns.
+// rather than as a switch. The renderer draws the list from the names kept on the row.
 EeveeModRow *EeveeChoiceRow(NSString *title, NSString *subtitle, NSString *key, NSArray<NSString *> *choices, NSInteger fallback) {
     EeveeModRow *row = [EeveeModRow new];
     row.title = title;
     row.subtitle = subtitle;
+    row.choiceNames = choices;
+    row.choiceKey = key;
+    row.choiceFallback = fallback;
     row.value = ^NSString *{
         NSInteger index = EeveeInt(key, fallback);
         return index >= 0 && index < (NSInteger)choices.count ? choices[(NSUInteger)index] : choices.firstObject;
-    };
-    __weak EeveeModRow *weakRow = row;
-    row.page = ^UIViewController *{
-        return [[EeveeChoicePage alloc] initWithTitle:title key:key choices:choices notes:weakRow.choiceNotes footer:weakRow.choiceFooter fallback:fallback chosen:weakRow.chosen];
     };
     return row;
 }
@@ -243,480 +133,23 @@ EeveeModRow *EeveeWithSymbol(EeveeModRow *row, NSString *symbol) {
     return row;
 }
 
-// What a page row carrying a value shows on the right: the value, then the chevron, the same
-// distance apart as Spotify's own rows keep them.
-static UIView *valueAndChevron(NSString *text) {
-    UILabel *label = [UILabel new];
-    label.font = EeveeTitleFont();
-    label.textColor = EeveeGrey();
-    label.text = text;
-    [label sizeToFit];
-    UIImageView *chevron = EeveeSymbolView(@"chevron.right", 13, UIImageSymbolWeightSemibold, 16);
-    CGFloat height = MAX(label.bounds.size.height, chevron.bounds.size.height);
-    UIView *box = [[UIView alloc] initWithFrame:CGRectMake(0, 0, label.bounds.size.width + 6 + chevron.bounds.size.width, height)];
-    label.center = CGPointMake(label.bounds.size.width / 2, height / 2);
-    chevron.center = CGPointMake(box.bounds.size.width - chevron.bounds.size.width / 2, height / 2);
-    [box addSubview:label];
-    [box addSubview:chevron];
-    return box;
-}
-
-// On means the row's own override is in place; anything else, including the opposite override
-// somebody set from the All flags page, reads as off.
-static BOOL flagRowOn(EeveeModRow *row) {
-    id value = EeveeFlagOverride(row.key);
-    return value && [value boolValue] != row.forceOff;
-}
-
-// A flag something of the mod's forces (Core/EeveeFlagForce.h: the redesign, the ad blocking): its row
-// shows what is forced and takes no touch, so the flag has one place to change.
-static BOOL flagRowLocked(EeveeModRow *row) {
-    return row.flag && EeveeLockedFlagValue(row.key, NULL) != nil;
-}
-
-// What a locked row shows: the forced value, read the row's way, so a Disable Canvas row reads on
-// while Canvas is forced off.
-static BOOL lockedRowOn(EeveeModRow *row) {
-    id value = EeveeLockedFlagValue(row.key, NULL);
-    return value ? [value boolValue] != row.forceOff : YES;
-}
-
-#pragma mark - the slider row
-
-// On the row's step, counted from its minimum, without the float noise of getting there.
-static double snapped(EeveeModRow *row, double value) {
-    if (row.step > 0) value = row.minimum + round(round((value - row.minimum) / row.step) * row.step * 1e6) / 1e6;
-    return MAX(row.minimum, MIN(row.maximum, value));
-}
-
-// Figures that do not shift sideways as they change, in whatever face the titles are in.
-static UIFont *tabular(UIFont *font) {
-    UIFontDescriptor *descriptor = [font.fontDescriptor fontDescriptorByAddingAttributes:@{
-        UIFontDescriptorFeatureSettingsAttribute: @[@{UIFontFeatureTypeIdentifierKey: @(kNumberSpacingType),
-                                                     UIFontFeatureSelectorIdentifierKey: @(kMonospacedNumbersSelector)}],
-    }];
-    return [UIFont fontWithDescriptor:descriptor size:font.pointSize];
-}
-
-// A step at a time for VoiceOver, or a twentieth of the range where the steps are too fine to swipe through.
-@interface EeveeModSlider : UISlider
-@property (nonatomic) float spokenStep;
-@end
-
-@implementation EeveeModSlider
-
-- (void)accessibilityIncrement {
-    self.value += self.spokenStep;
-    [self sendActionsForControlEvents:UIControlEventValueChanged];
-}
-
-- (void)accessibilityDecrement {
-    self.value -= self.spokenStep;
-    [self sendActionsForControlEvents:UIControlEventValueChanged];
-}
-
-@end
-
-// The Audio effects page's slider row (Shared/JamesDSP/JamesDSPPage.m), for any page: the title and the
-// value over a slider in the accent colour, a subtitle between them when there is one, each step stored
-// as the thumb reaches it.
-@interface EeveeModSliderCell : UITableViewCell
-+ (CGFloat)heightFor:(EeveeModRow *)row;
-- (void)showRow:(EeveeModRow *)row;
-@end
-
-@implementation EeveeModSliderCell {
-    EeveeModRow *_row;
-    UILabel *_title, *_subtitle, *_value;
-    EeveeModSlider *_slider;
-    double _shown;
-    BOOL _detents;   // few enough steps that the thumb jumps between them as it is dragged
-}
-
-static const CGFloat kSliderTop = 12, kSliderLine = 18, kSliderSubtitle = 14, kSliderGap = 6, kSliderHeight = 28, kSliderBottom = 10;
-
-+ (CGFloat)heightFor:(EeveeModRow *)row {
-    return kSliderTop + kSliderLine + (row.subtitle ? kSliderSubtitle : 0) + kSliderGap + kSliderHeight + kSliderBottom;
-}
-
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)identifier {
-    if (!(self = [super initWithStyle:style reuseIdentifier:identifier])) return nil;
-    self.selectionStyle = UITableViewCellSelectionStyleNone;
-    _title = [UILabel new];
-    _title.textColor = UIColor.whiteColor;
-    _title.isAccessibilityElement = NO;
-    _subtitle = [UILabel new];
-    _subtitle.textColor = EeveeGrey();
-    _subtitle.isAccessibilityElement = NO;
-    _value = [UILabel new];
-    _value.textColor = EeveeGrey();
-    _value.textAlignment = NSTextAlignmentRight;
-    _value.isAccessibilityElement = NO;
-    _slider = [EeveeModSlider new];
-    _slider.maximumTrackTintColor = [UIColor colorWithWhite:1 alpha:0.16];
-    [_slider addTarget:self action:@selector(moved) forControlEvents:UIControlEventValueChanged];
-    [_slider addTarget:self action:@selector(released) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside | UIControlEventTouchCancel];
-    for (UIView *view in @[_title, _subtitle, _value, _slider]) [self.contentView addSubview:view];
-    return self;
-}
-
-- (void)showRow:(EeveeModRow *)row {
-    _row = row;
-    NSInteger count = row.step > 0 ? (NSInteger)lround((row.maximum - row.minimum) / row.step) : 0;
-    _detents = count > 0 && count <= 24;
-    _title.font = EeveeTitleFont();
-    _subtitle.font = EeveeSubtitleFont();
-    _value.font = tabular(EeveeTitleFont());
-    _title.text = row.title;
-    _subtitle.text = row.subtitle;
-    _subtitle.hidden = !row.subtitle;
-    _slider.minimumTrackTintColor = EeveeGreen();
-    _slider.minimumValue = (float)row.minimum;
-    _slider.maximumValue = (float)row.maximum;
-    _slider.spokenStep = (float)(count > 0 && count <= 40 ? row.step : snapped(row, row.minimum + (row.maximum - row.minimum) / 20) - row.minimum);
-    _shown = snapped(row, row.number());
-    _slider.value = (float)_shown;
-    _slider.accessibilityLabel = row.title;
-    _slider.accessibilityHint = row.subtitle;
-    [self showValue];
-}
-
-- (void)showValue {
-    _value.text = _row.format ? _row.format(_shown) : [NSString stringWithFormat:@"%g", _shown];
-    _slider.accessibilityValue = _value.text;
-    [self setNeedsLayout];
-}
-
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    CGFloat width = self.contentView.bounds.size.width, side = 16, y = kSliderTop;
-    [_value sizeToFit];
-    CGFloat valueWidth = MAX(_value.bounds.size.width, 44);
-    _value.frame = CGRectMake(width - side - valueWidth, y, valueWidth, kSliderLine);
-    _title.frame = CGRectMake(side, y, CGRectGetMinX(_value.frame) - side - 8, kSliderLine);
-    y += kSliderLine;
-    if (_row.subtitle) {
-        _subtitle.frame = CGRectMake(side, y, width - 2 * side, kSliderSubtitle);
-        y += kSliderSubtitle;
-    }
-    _slider.frame = CGRectMake(side, y + kSliderGap, width - 2 * side, kSliderHeight);
-}
-
-- (void)moved {
-    double value = snapped(_row, _slider.value);
-    if (_detents) _slider.value = (float)value;
-    if (value == _shown) return;
-    _shown = value;
-    if (_row.setNumber) _row.setNumber(value);
-    [self showValue];
-}
-
-- (void)released {
-    [_slider setValue:(float)_shown animated:YES];
-}
-
-@end
-
 #pragma mark - the page
 
+// The page as data, drawn by EeveeModPageView.swift: the row model above is all a renderer needs, so
+// this is a container rather than the UITableView it used to be. The rows carry what a switch, a link,
+// a slider or a choice needs; nothing here draws.
 @implementation EeveeModPage {
     NSArray<EeveeModSection *> *_sections;
-    NSArray<NSArray<EeveeModRow *> *> *_shown;   // each section's rows that show now (EeveeModRow.visible)
-    UIView *_intro;
-    UIView *_footer;
-    NSTimer *_ticker;
-    BOOL _live;
 }
 
 - (instancetype)initWithTitle:(NSString *)title intro:(NSString *)intro sections:(NSArray<EeveeModSection *> *)sections footer:(NSString *)footer {
     if (!(self = [super initWithStyle:UITableViewStyleInsetGrouped])) return nil;
     self.title = title;
+    _titleText = [title copy];
+    _introText = [intro copy];
+    _footerText = [footer copy];
     _sections = sections;
-    _shown = [self rowsToShow];
-    _intro = intro ? EeveeNote(intro) : nil;
-    _footer = footer ? EeveeNote(footer) : nil;
-    // A page row reads its value out when the page appears rather than on the ticker, so only the
-    // rows whose numbers climb on their own keep one running.
-    for (EeveeModSection *s in sections) for (EeveeModRow *row in s.rows) _live |= row.value && !row.page;
     return self;
-}
-
-- (NSArray<NSArray<EeveeModRow *> *> *)rowsToShow {
-    NSMutableArray<NSArray<EeveeModRow *> *> *shown = [NSMutableArray arrayWithCapacity:_sections.count];
-    for (EeveeModSection *s in _sections) {
-        NSMutableArray<EeveeModRow *> *rows = [NSMutableArray arrayWithCapacity:s.rows.count];
-        for (EeveeModRow *row in s.rows) if (!row.visible || row.visible()) [rows addObject:row];
-        [shown addObject:rows];
-    }
-    return shown;
-}
-
-// The rows that are to show now fade in where they sit and the others fade out, and whatever came in is
-// scrolled into view: it opens under the switch that brought it, which may be the page's last row. Answers
-// whether anything moved; `done` runs once it has, and only then.
-- (BOOL)showRowsThen:(void (^)(void))done {
-    NSArray<NSArray<EeveeModRow *> *> *next = [self rowsToShow];
-    if ([next isEqualToArray:_shown]) return NO;
-    NSMutableArray<NSIndexPath *> *gone = [NSMutableArray array], *coming = [NSMutableArray array];
-    [_sections enumerateObjectsUsingBlock:^(EeveeModSection *s, NSUInteger section, BOOL *stop) {
-        NSArray<EeveeModRow *> *before = self->_shown[section], *after = next[section];
-        [before enumerateObjectsUsingBlock:^(EeveeModRow *row, NSUInteger i, BOOL *stop) {
-            if (![after containsObject:row]) [gone addObject:[NSIndexPath indexPathForRow:(NSInteger)i inSection:(NSInteger)section]];
-        }];
-        [after enumerateObjectsUsingBlock:^(EeveeModRow *row, NSUInteger i, BOOL *stop) {
-            if (![before containsObject:row]) [coming addObject:[NSIndexPath indexPathForRow:(NSInteger)i inSection:(NSInteger)section]];
-        }];
-    }];
-    UITableView *table = self.tableView;
-    [table performBatchUpdates:^{
-        self->_shown = next;
-        [table deleteRowsAtIndexPaths:gone withRowAnimation:UITableViewRowAnimationFade];
-        [table insertRowsAtIndexPaths:coming withRowAnimation:UITableViewRowAnimationFade];
-    } completion:^(BOOL finished) {
-        if (coming.count) {
-            CGRect rows = CGRectNull;
-            for (NSIndexPath *path in coming) rows = CGRectUnion(rows, [table rectForRowAtIndexPath:path]);
-            CGFloat room = table.bounds.size.height - table.adjustedContentInset.top - table.adjustedContentInset.bottom;
-            rows.size.height = MIN(rows.size.height, room);
-            [table scrollRectToVisible:rows animated:YES];
-        }
-        if (done) done();
-    }];
-    return YES;
-}
-
-// The row a switch or an ⓘ belongs to, by the cell it sits in: rows coming and going move the rows under
-// them, so a position remembered when the cell was made may be stale.
-- (NSIndexPath *)pathOf:(UIView *)control {
-    UIView *view = control;
-    while (view && ![view isKindOfClass:UITableViewCell.class]) view = view.superview;
-    return view ? [self.tableView indexPathForCell:(UITableViewCell *)view] : nil;
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.tableView.tableHeaderView = _intro;
-    self.tableView.tableFooterView = _footer;
-}
-
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    if (_intro) EeveeFitNote(self.tableView, _intro, 24, 0);
-    if (_footer) EeveeFitNote(self.tableView, _footer, 16, 24);
-}
-
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-    EeveeInsetForBars(self.tableView);
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    // Reloaded whether or not anything ticks: a choice row is showing whatever was picked on the
-    // page it opened, which is gone by the time this one comes back, and may bring rows or take them.
-    _shown = [self rowsToShow];
-    [self.tableView reloadData];
-    if (!_live) return;
-    // The counters climb while the page is open; the labels are written straight into the cells so
-    // that a reload never lands under a switch being dragged. A cancelled back swipe appears the
-    // page again without it ever disappearing, so the old timer goes first.
-    [_ticker invalidate];
-    _ticker = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(readValues) userInfo:nil repeats:YES];
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    [_ticker invalidate];
-    _ticker = nil;
-}
-
-- (void)readValues {
-    for (UITableViewCell *cell in self.tableView.visibleCells) {
-        EeveeModRow *row = [self rowAt:[self.tableView indexPathForCell:cell]];
-        UILabel *label = (UILabel *)cell.accessoryView;
-        if (!row.value || row.page || ![label isKindOfClass:UILabel.class]) continue;
-        label.text = row.value();
-        [label sizeToFit];
-        [cell setNeedsLayout];
-    }
-}
-
-- (EeveeModRow *)rowAt:(NSIndexPath *)path {
-    return _shown[(NSUInteger)path.section][(NSUInteger)path.row];
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)table {
-    return (NSInteger)_sections.count;
-}
-
-- (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
-    return (NSInteger)_shown[(NSUInteger)section].count;
-}
-
-// A slider row is laid out by hand; every other row sizes itself.
-- (CGFloat)tableView:(UITableView *)table heightForRowAtIndexPath:(NSIndexPath *)path {
-    EeveeModRow *row = [self rowAt:path];
-    return row.number ? [EeveeModSliderCell heightFor:row] : UITableViewAutomaticDimension;
-}
-
-- (UIView *)tableView:(UITableView *)table viewForHeaderInSection:(NSInteger)section {
-    NSString *title = _sections[(NSUInteger)section].title;
-    return title ? EeveeSectionHeader(table, title) : nil;
-}
-
-- (CGFloat)tableView:(UITableView *)table heightForHeaderInSection:(NSInteger)section {
-    return _sections[(NSUInteger)section].title ? EeveeSectionHeaderHeight : EeveeSectionGap;
-}
-
-- (UIView *)tableView:(UITableView *)table viewForFooterInSection:(NSInteger)section {
-    NSString *footer = _sections[(NSUInteger)section].footer;
-    return footer ? EeveeSectionFooter(table, footer) : nil;
-}
-
-- (CGFloat)tableView:(UITableView *)table heightForFooterInSection:(NSInteger)section {
-    NSString *footer = _sections[(NSUInteger)section].footer;
-    return footer ? EeveeSectionFooterHeight(table, footer) : CGFLOAT_MIN;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)table cellForRowAtIndexPath:(NSIndexPath *)path {
-    EeveeModRow *row = [self rowAt:path];
-    if (row.number) {
-        EeveeModSliderCell *cell = [table dequeueReusableCellWithIdentifier:@"slider"] ?: [[EeveeModSliderCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"slider"];
-        cell.backgroundColor = EeveeCardBackground();
-        [cell showRow:row];
-        return cell;
-    }
-    UITableViewCell *cell = EeveeDequeueCell(table, @"row");
-    EeveeFillCell(cell, labelledTitle(row), row.subtitle, row.color, row.symbol);
-    UIListContentConfiguration *content = (UIListContentConfiguration *)cell.contentConfiguration;
-    if (row.color) content.secondaryTextProperties.color = row.color;
-    BOOL tile = row.symbol && !row.color;
-    if (tile) content.image = EeveeTileImage(row.symbol);
-    cell.contentConfiguration = content;
-    cell.separatorInset = UIEdgeInsetsMake(0, row.symbol ? (tile ? 58 : 48) : 16, 0, 0);
-
-    if (row.key) {
-        BOOL locked = flagRowLocked(row);
-        // A lock that beats an override shows over one; the others give way to it.
-        BOOL beats = NO;
-        if (locked) EeveeLockedFlagValue(row.key, &beats);
-        BOOL showsLock = locked && (beats || !EeveeFlagOverride(row.key));
-        BOOL on = row.flag ? (showsLock ? lockedRowOn(row) : flagRowOn(row)) : EeveeFlag(row.key, row.defaultOn);
-        UIControl *toggle;
-        if (row.glows) {
-            EeveeGlowSwitch *glow = [EeveeGlowSwitch new];
-            glow.on = on;
-            glow.accessibilityLabel = row.title;
-            toggle = glow;
-        } else {
-            UISwitch *plain = [UISwitch new];
-            plain.onTintColor = EeveeGreen();
-            plain.on = on;
-            toggle = plain;
-        }
-        toggle.enabled = !locked;
-        // A disabled switch would swallow the tap; letting it through is what gets the row asked.
-        toggle.userInteractionEnabled = !locked;
-        [toggle addTarget:self action:@selector(toggled:) forControlEvents:UIControlEventValueChanged];
-        cell.accessoryView = row.info ? [self infoButtonBeside:toggle] : toggle;
-        cell.selectionStyle = locked ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
-    } else if (row.page) {
-        cell.accessoryView = row.value ? valueAndChevron(row.value()) : EeveeSymbolView(@"chevron.right", 13, UIImageSymbolWeightSemibold, 16);
-        cell.selectionStyle = UITableViewCellSelectionStyleDefault;
-    } else if (row.value) {
-        UILabel *label = [UILabel new];
-        label.font = EeveeTitleFont();
-        label.textColor = EeveeGrey();
-        label.text = row.value();
-        [label sizeToFit];
-        cell.accessoryView = label;
-        cell.selectionStyle = row.action ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
-    } else if (row.action) {
-        cell.selectionStyle = UITableViewCellSelectionStyleDefault;
-    }
-    return cell;
-}
-
-- (void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)path {
-    EeveeModRow *row = [self rowAt:path];
-    if (flagRowLocked(row)) {
-        [table deselectRowAtIndexPath:path animated:YES];
-        [self explainLock];
-        return;
-    }
-    if (row.page) [self.navigationController pushViewController:row.page() animated:YES];
-    if (!row.action) return;
-    row.action();
-    [table deselectRowAtIndexPath:path animated:YES];
-    [self readValues];
-}
-
-// The ⓘ to the left of the switch, the grey of a subtitle, 30pt across so it is easy to hit next to it.
-- (UIView *)infoButtonBeside:(UIControl *)toggle {
-    UIButton *info = [UIButton buttonWithType:UIButtonTypeSystem];
-    UIImageSymbolConfiguration *symbol = [UIImageSymbolConfiguration configurationWithPointSize:17 weight:UIImageSymbolWeightRegular];
-    [info setImage:[UIImage systemImageNamed:@"info.circle" withConfiguration:symbol] forState:UIControlStateNormal];
-    info.tintColor = EeveeGrey();
-    info.accessibilityLabel = @"About this switch";
-    [info addTarget:self action:@selector(infoTapped:) forControlEvents:UIControlEventTouchUpInside];
-    [toggle sizeToFit];
-    CGFloat side = 30, gap = 8, height = MAX(side, toggle.bounds.size.height);
-    UIView *box = [[UIView alloc] initWithFrame:CGRectMake(0, 0, side + gap + toggle.bounds.size.width, height)];
-    info.frame = CGRectMake(0, (height - side) / 2, side, side);
-    toggle.frame = CGRectMake(side + gap, (height - toggle.bounds.size.height) / 2, toggle.bounds.size.width, toggle.bounds.size.height);
-    [box addSubview:info];
-    [box addSubview:toggle];
-    return box;
-}
-
-- (void)infoTapped:(UIButton *)button {
-    NSIndexPath *path = [self pathOf:button];
-    if (!path) return;
-    EeveeModRow *row = [self rowAt:path];
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:row.title message:row.info preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
-    [self presentViewController:alert animated:YES completion:nil];
-}
-
-// A UISwitch or an EeveeGlowSwitch, both answering isOn.
-- (void)toggled:(UIControl *)toggle {
-    BOOL on = [(UISwitch *)toggle isOn];
-    NSIndexPath *path = [self pathOf:toggle];
-    if (!path) return;
-    EeveeModRow *row = [self rowAt:path];
-    if (row.flag) EeveeSetFlagOverride(row.key, on ? @(!row.forceOff) : nil);
-    else EeveeSetEnabled(row.key, on);
-    if (row.changed) row.changed(on);
-    // A glowing switch is let finish its slide before the reload puts a new one in its place; rows coming
-    // or going are let finish first too.
-    NSTimeInterval wait = [toggle isKindOfClass:EeveeGlowSwitch.class] ? 0.45 : 0;
-    void (^reload)(void) = ^{
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(wait * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{ [self.tableView reloadData]; });
-    };
-    BOOL moved = [self showRowsThen:row.changed ? reload : nil];
-    if (row.changed && !moved) reload();
-    if (on && row.warning) [self warn:row];
-}
-
-// A locked row will not move, and nothing on it says why.
-- (void)explainLock {
-    UIAlertController *alert = [UIAlertController
-        alertControllerWithTitle:@"Overridden by another setting"
-                         message:@"Another switch is forcing this flag, so the row shows what it forces instead of taking a value of its own."
-                  preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
-    [self presentViewController:alert animated:YES completion:nil];
-}
-
-- (void)warn:(EeveeModRow *)row {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[row.title stringByAppendingString:@" is unstable"]
-                                                                  message:row.warning
-                                                           preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"Open GitHub" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        EeveeOpenURL(EeveeRepoURL);
-    }]];
-    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
-    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end

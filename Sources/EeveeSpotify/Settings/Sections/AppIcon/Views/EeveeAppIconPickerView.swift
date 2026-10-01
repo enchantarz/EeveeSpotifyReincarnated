@@ -4,11 +4,24 @@ import UIKit
 private let primaryIconKey = "__primary__"
 private let selectedKeyDefault = "EeveeSelectedAppIconName"
 
+/// Where an icon's files live. `.appBundle` icons are registered as CFBundleAlternateIcons on the
+/// app's own Info.plist — Tools/alt-icons.sh does that for every built IPA — so iOS's own switcher
+/// applies them. `.tweakBundle` icons are the same files as the deb stages inside the tweak bundle
+/// (the Makefile copies Assets/AppIcon there): a stock App Store install has no
+/// CFBundleAlternateIcons, so nothing can apply an icon to it — the Home Screen icon is part of the
+/// app's signed bundle and compiled Assets.car — and they are listed to look at, with a tap
+/// explaining that instead of pretending.
+private enum IconSource {
+    case appBundle
+    case tweakBundle
+}
+
 private struct AppIconEntry: Identifiable, Hashable {
     let id: String
     let title: String
     let alternateName: String?
     let iconFiles: [String]
+    let source: IconSource
 }
 
 struct EeveeAppIconPickerView: View {
@@ -111,25 +124,51 @@ struct EeveeAppIconPickerView: View {
             AppIconEntry(id: primaryIconKey,
                          title: "Default",
                          alternateName: nil,
-                         iconFiles: primaryFiles)
+                         iconFiles: primaryFiles,
+                         source: .appBundle)
         ]
         let alternates = bundleIcons?["CFBundleAlternateIcons"] as? [String: Any] ?? [:]
-        for key in alternates.keys.sorted(by: { $0.localizedCaseInsensitiveCompare($1) == .orderedAscending }) {
-            let info = alternates[key] as? [String: Any]
-            let files = info?["CFBundleIconFiles"] as? [String] ?? [key]
-            // Use the plist key as the display title but convert underscores,
-            // hyphens, camelCase boundaries, and parentheses to readable spaces.
-            let displayTitle = Self.prettifyIconKey(key, prettify: prettifyNames)
-            // Use the first CFBundleIconFiles entry as the alternateName passed to
-            // setAlternateIconName. iOS resolves icons by the plist key — but on
-            // sideloaded/jailbroken builds, keys with spaces or parentheses can fail.
-            // Using the actual icon filename stem is a reliable fallback; if files is
-            // empty we fall back to the raw key.
-            let alternateName = files.first ?? key
-            entries.append(AppIconEntry(id: key, title: displayTitle, alternateName: alternateName, iconFiles: files))
+        if alternates.isEmpty {
+            // Nothing registered on the app itself — a stock App Store install, i.e. the deb's
+            // case. The deb ships the icons inside the tweak bundle; list them from there, where
+            // applying is refused with an explanation rather than a system error.
+            entries.append(contentsOf: Self.tweakBundleIcons(prettify: prettifyNames))
+        } else {
+            for key in alternates.keys.sorted(by: { $0.localizedCaseInsensitiveCompare($1) == .orderedAscending }) {
+                let info = alternates[key] as? [String: Any]
+                let files = info?["CFBundleIconFiles"] as? [String] ?? [key]
+                // Use the plist key as the display title but convert underscores,
+                // hyphens, camelCase boundaries, and parentheses to readable spaces.
+                let displayTitle = Self.prettifyIconKey(key, prettify: prettifyNames)
+                // Use the first CFBundleIconFiles entry as the alternateName passed to
+                // setAlternateIconName. iOS resolves icons by the plist key — but on
+                // sideloaded/jailbroken builds, keys with spaces or parentheses can fail.
+                // Using the actual icon filename stem is a reliable fallback; if files is
+                // empty we fall back to the raw key.
+                let alternateName = files.first ?? key
+                entries.append(AppIconEntry(id: key, title: displayTitle, alternateName: alternateName, iconFiles: files, source: .appBundle))
+            }
         }
         icons = entries
         selectedKey = currentSelectedKey()
+    }
+
+    // The Makefile stages Assets/AppIcon into the tweak bundle's AppIcons/ directory; the stems
+    // are its @2x files, the same set Tools/alt-icons.sh registers into a built IPA.
+    private static func tweakBundleIcons(prettify: Bool) -> [AppIconEntry] {
+        guard let dir = BundleHelper.shared.appIconsDirectoryURL,
+              let names = try? FileManager.default.contentsOfDirectory(atPath: dir.path) else { return [] }
+        let stems = names
+            .filter { $0.hasSuffix("@2x.png") && !$0.contains("~ipad") }
+            .map { String($0.dropLast("@2x.png".count)) }
+            .sorted { $0.localizedCaseInsensitiveCompare($1) == .orderedAscending }
+        return stems.map { stem in
+            AppIconEntry(id: stem,
+                         title: prettifyIconKey(stem, prettify: prettify),
+                         alternateName: stem,
+                         iconFiles: [stem],
+                         source: .tweakBundle)
+        }
     }
 
     // iOS's alternateIconName getter returns nil on resigned bundles even after a successful set — trust our pref.
@@ -144,8 +183,11 @@ struct EeveeAppIconPickerView: View {
     }
 
     private func apply(_ icon: AppIconEntry) {
-        guard UIApplication.shared.supportsAlternateIcons else {
-            errorMessage = "Alternate icons are not supported on this device."
+        guard icon.source == .appBundle, UIApplication.shared.supportsAlternateIcons else {
+            // A stock App Store install (the deb's case): iOS keeps the Home Screen icon inside
+            // the app's signed bundle — the compiled Assets.car — and refuses setAlternateIconName
+            // without CFBundleAlternateIcons, which only the build can add. The patched IPAs do.
+            errorMessage = "appIconUnavailableMessage".localized
             return
         }
         let previous = selectedKey
@@ -237,6 +279,14 @@ struct EeveeAppIconPickerView: View {
                 let path = bundlePath.appendingPathComponent(c)
                 if FileManager.default.fileExists(atPath: path),
                    let img = UIImage(contentsOfFile: path) {
+                    return img
+                }
+            }
+        }
+        // The tweak bundle's copy of the same icons — where a stock install's picker previews from.
+        for stem in stems {
+            for suffix in ["@\(scale)x", "@3x", "@2x", ""] {
+                if let img = BundleHelper.shared.appIconImage(named: stem + suffix) {
                     return img
                 }
             }

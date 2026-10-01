@@ -139,3 +139,24 @@ play_songs_in_any_order = "好きな曲順で再生";
 organize_listening_queue = "次に再生する楽曲のリストを整理できる";
 
 payment_notice = "EeveeSpotifyは、無料で一部のプレミアムの機能を使えるようにするパッチを適用します。";
+
+// Ported features: the SpicyLyrics karaoke view, the AMOLED black theme, the Jam/rating
+// toggles, Hysan's recovery fund, and the app-icon picker.
+spicylyrics_description = "SpicyLyrics は単語ごとのカラオケ歌詞を提供します。";
+spicylyrics_key_missing = "SpicyLyrics API キーが未設定";
+spicylyrics_key_invalid = "SpicyLyrics API キーが拒否されました";
+karaoke_word_synced_button = "カスタム歌詞ビュー";
+amoled_theme = "AMOLED ブラックテーマ";
+hide_jam_from_menu = "メニューから Jam を隠す";
+hide_jam_from_menu_description = "曲/プレイリストのコンテキストメニュー、デバイス選択、キューから「Jam を開始」を取り除きます。";
+block_rating_dialogs = "アプリ評価ダイアログをブロック";
+block_rating_dialogs_description = "App Store の星評価の催促とアプリ内レビューの要求を抑止します。";
+hysan_recovery_fund = "Hysan の Elsa 回復基金";
+hysan_recovery_fund_description = "Hysan は 2026 年から Elsa に片思いしていて、その話を止めません。ここのコーヒー 1 杯ごとに、彼の回復と mod が資金援助されます。☕";
+appIconTitle = "アイコンを選択";
+appIconSubtitle = "初回は iOS が確認を表示します。ホーム画面の更新に数秒かかることがあります。";
+appIconUnavailableMessage = "この Spotify は App Store からインストールされたため、iOS はホーム画面のアイコンをアプリの署名済みバンドル内に保持し、mod による変更を許しません。アイコンを登録して署名した EeveeSpotify のパッチ済み IPA をインストールすれば、切り替えが機能します。";
+iconSelected = "選択中";
+iconTapToApply = "タップして適用";
+prettifyIconNames = "アイコン名を見やすく";
+prettifyIconNamesDescription = "アンダースコア、ハイフン、camelCase を空白に変換します";

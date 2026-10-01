@@ -298,3 +298,17 @@ managingSegmentsSectionDeps2 = "Ustawienia → „Zgłoszenia i szkice” przech
 categoriesTitle = "Kategorie";
 categoriesSectionTitle1 = "Akcje dla kategorii";
 categoriesSectionDeps1 = "Wył. = ignoruj. Pokaż = tylko rysuj na pasku. Ręcznie = pytaj przed pominięciem. Auto = pomijaj bez pytania.";
+
+// Ported features: the SpicyLyrics karaoke view, the AMOLED black theme, the Jam/rating
+// toggles, Hysan's recovery fund, and the app-icon picker.
+spicylyrics_key_missing = "Brak klucza API SpicyLyrics";
+spicylyrics_key_invalid = "Klucz API SpicyLyrics odrzucony";
+karaoke_word_synced_button = "Widok własnych tekstów";
+amoled_theme = "Czarny motyw AMOLED";
+hide_jam_from_menu = "Ukryj Jam z menu";
+hide_jam_from_menu_description = "Usuwa \"Rozpocznij Jam\" z menu kontekstowych utworu/playlista, selektora urządzeń i kolejki.";
+block_rating_dialogs = "Blokuj okna ocen";
+block_rating_dialogs_description = "Wycisza prośby o gwiazdki z App Store i prośby o ocenę w aplikacji.";
+hysan_recovery_fund = "Fundusz powrotu do zdrowia Hysana";
+hysan_recovery_fund_description = "Hysan jest zakochany w Elzie od 2026 i nie przestaje o tym mówić. Każda kawa tutaj finansuje jego powrót do zdrowia — oraz moda. ☕";
+appIconUnavailableMessage = "Ten Spotify został zainstalowany z App Store, więc iOS trzyma jego ikonę ekranu głównego w podpisanym pakiecie aplikacji i nie pozwala modowi jej zmienić. Zainstaluj poprawioną kompilację IPA EeveeSpotify — podpisaną z zarejestrowanymi ikonami — a zmiana zadziała.";

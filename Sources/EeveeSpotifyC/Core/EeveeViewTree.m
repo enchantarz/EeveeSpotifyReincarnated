@@ -40,31 +40,12 @@ BOOL EeveeKeepsColor(UIView *view) {
 
 void EeveeStripBackgrounds(UIView *view) {
     if ([view isKindOfClass:UIVisualEffectView.class]) return;
-    // The karaoke views paint nothing to strip and hold a label for every word in sight.
-    if ([NSStringFromClass(view.class) hasPrefix:@"EeveeRKaraoke"]) return;
     if (!EeveeKeepsColor(view)) view.layer.backgroundColor = NULL;
     if ([view.layer isKindOfClass:CAGradientLayer.class] || [NSStringFromClass(view.class) containsString:@"GradientView"]) view.hidden = YES;
     for (CALayer *layer in view.layer.sublayers) {
         if ([layer isKindOfClass:CAGradientLayer.class]) layer.hidden = YES;
     }
     for (UIView *sub in view.subviews) EeveeStripBackgrounds(sub);
-}
-
-BOOL EeveeIsVisibleColor(CGColorRef color) {
-    if (!color || CGColorGetAlpha(color) < 0.05) return NO;
-    const CGFloat *c = CGColorGetComponents(color);
-    size_t n = CGColorGetNumberOfComponents(color);
-    CGFloat brightest = 0;
-    for (size_t i = 0; i + 1 < n; i++) brightest = MAX(brightest, c[i]);
-    return brightest > 0.08;
-}
-
-BOOL EeveeIsLightColor(CGColorRef color) {
-    if (!color || CGColorGetAlpha(color) < 0.5) return NO;
-    const CGFloat *c = CGColorGetComponents(color);
-    size_t n = CGColorGetNumberOfComponents(color);
-    for (size_t i = 0; i + 1 < n; i++) if (c[i] < 0.85) return NO;
-    return YES;
 }
 
 // Lighter greys (#1F1F1F placeholders, #292929 cards) and translucent paint stay.
@@ -75,9 +56,4 @@ BOOL EeveeIsBaseSurface(CGColorRef color) {
     if (n == 2) return c[0] <= 0.10;
     if (n < 3) return NO;
     return c[0] <= 0.10 && fabs(c[0] - c[1]) < 0.02 && fabs(c[1] - c[2]) < 0.02;
-}
-
-BOOL EeveeLooksLikeCard(UIView *view, CGColorRef color) {
-    CGSize size = view.bounds.size;
-    return size.height >= 40 && size.height <= 140 && size.width >= 200 && EeveeIsVisibleColor(color);
 }

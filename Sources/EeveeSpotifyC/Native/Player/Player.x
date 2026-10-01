@@ -108,7 +108,10 @@ static UIView *backdropIn(UIView *plane) {
     UIView *backdrop = objc_getAssociatedObject(plane, &kBackdropKey);
     if (backdrop) return backdrop;
 
-    backdrop = EeveeBackdropMake(plane.bounds, EeveeFlag(EeveeKeyAmoled, NO) ? 1 : 0.94);
+    // The backdrop fades to black when AMOLED is on. spoti.pw's AMOLED key is gone; this is
+    // EeveeSpotify's own toggle (Sources/EeveeSpotify/AmoledTheme.x.swift), stored by the Swift side.
+    BOOL amoled = [[NSUserDefaults standardUserDefaults] boolForKey:@"amoledTheme"];
+    backdrop = EeveeBackdropMake(plane.bounds, amoled ? 1 : 0.94);
     UIImageView *cover = EeveeBackdropImageView(backdrop);
     cover.image = eevee_coverSmall;
     eevee_coverView = cover;

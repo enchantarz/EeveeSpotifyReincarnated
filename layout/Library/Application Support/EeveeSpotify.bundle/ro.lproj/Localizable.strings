@@ -113,3 +113,24 @@ contributors = "Contributori";
 
 request_anonymous_token = "Solicitare Token anonim";
 request_anonymous_token_description = "Atingeți „Solicitare Token anonim” pentru a solicita un token de la Musixmatch fără autorizație.";
+
+// Ported features: the SpicyLyrics karaoke view, the AMOLED black theme, the Jam/rating
+// toggles, Hysan's recovery fund, and the app-icon picker.
+spicylyrics_description = "SpicyLyrics oferă versuri karaoke cuvânt cu cuvânt.";
+spicylyrics_key_missing = "Fără cheie API SpicyLyrics";
+spicylyrics_key_invalid = "Cheie API SpicyLyrics respinsă";
+karaoke_word_synced_button = "Vizualizare versuri personalizate";
+amoled_theme = "Temă neagră AMOLED";
+hide_jam_from_menu = "Ascunde Jam din meniu";
+hide_jam_from_menu_description = "Elimină \"Începe un Jam\" din meniurile contextuale ale piesei/playliștului, din selectorul de dispozitive și din coadă.";
+block_rating_dialogs = "Blochează dialogurile de evaluare";
+block_rating_dialogs_description = "Suprimă cererile de stele din App Store și cererile de recenzie din aplicație.";
+hysan_recovery_fund = "Fondul de recuperare Elsa al lui Hysan";
+hysan_recovery_fund_description = "Lui Hysan îi place de Elsa din 2026 și nu încetează să vorbească despre asta. Fiecare cafea de aici îi finanțează recuperarea — și modul. ☕";
+appIconTitle = "Alege pictograma";
+appIconSubtitle = "iOS afișează o confirmare prima dată. Ecranul principal poate dura câteva secunde să se actualizeze.";
+appIconUnavailableMessage = "Acest Spotify a fost instalat din App Store, așa că iOS își păstrează pictograma ecranului principal în pachetul semnat al aplicației și nu lasă modul să o schimbe. Instalează o versiune IPA patch-uită a EeveeSpotify — semnată cu pictogramele înregistrate — iar schimbarea funcționează.";
+iconSelected = "Selectat";
+iconTapToApply = "Atinge pentru a aplica";
+prettifyIconNames = "Înfrumusețează numele pictogramelor";
+prettifyIconNamesDescription = "Transformă liniile de subliniere, cratimele și camelCase în spații";

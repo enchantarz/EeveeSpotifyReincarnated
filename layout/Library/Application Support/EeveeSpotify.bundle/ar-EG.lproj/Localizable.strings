@@ -286,3 +286,20 @@ managingSegmentsSectionDeps2 = "الإعدادات ← 'البلاغات وال�
 categoriesTitle = "الأقسام";
 categoriesSectionTitle1 = "أفعال الأقسام";
 categoriesSectionDeps1 = "قفل = تجاهل، إظهار = هيظهر المقطع على شريط التقدم بس، يدوي = هيسألك قبل التخطي، تلقائي = هيتخطى على طول.";
+
+// Ported features: the SpicyLyrics karaoke view, the AMOLED black theme, the Jam/rating
+// toggles, Hysan's recovery fund, and the app-icon picker.
+spicylyrics_description = "SpicyLyrics بيقدّم كلمات كاريوكي كلمة كلمة.";
+spicylyrics_key_missing = "مفيش مفتاح API لـ SpicyLyrics";
+spicylyrics_key_invalid = "مفتاح API بتاع SpicyLyrics اتردّ";
+karaoke_word_synced_button = "شاشة كلمات مخصصة";
+amoled_theme = "ثيم أسود AMOLED";
+hide_jam_from_menu = "اخفي Jam من المنيو";
+hide_jam_from_menu_description = "بيشيل \"ابدأ Jam\" من منيو الأغنية/البليليست، ومن اختيار الجهاز، ومن الكيو.";
+block_rating_dialogs = "اقفل رسائل تقييم التطبيق";
+block_rating_dialogs_description = "بيمنع طلبات النجوم من اب ستور وطلبات المراجعة جوه التطبيق.";
+hysan_recovery_fund = "صندوق شفاء هيسان من إلسا";
+hysan_recovery_fund_description = "هيسان واقع في حب إلسا من 2026 ومش بيسكت عن الكلام في الموضوع ده. كل قهوة هنا بتموّل شفاه — والمود. ☕";
+appIconUnavailableMessage = "السبوتيفاي ده متسطب من اب ستور، فـ iOS بيحتفظ بأيقونة الشاشة الرئيسية جوه باكدج التطبيق الموقّع ومش هيسيب المود يغيّرها. سطب نسخة IPA مترقّعة من EeveeSpotify — موقّعة بالأيقونات متسجلة — وساعتها التغيير هيشتغل.";
+prettifyIconNames = "شوّف أسماء الأيقونات";
+prettifyIconNamesDescription = "بيحوّل الشرطات السفلية والشرطات وcamelCase لمسافات";

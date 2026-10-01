@@ -110,3 +110,24 @@ let_the_music_play = "Deixa a música tocar...";
 liked_songs = "Músicas de que Gostaste";
 
 contributors = "Contribuidores";
+
+// Ported features: the SpicyLyrics karaoke view, the AMOLED black theme, the Jam/rating
+// toggles, Hysan's recovery fund, and the app-icon picker.
+spicylyrics_description = "O SpicyLyrics fornece letras de karaoké palavra a palavra.";
+spicylyrics_key_missing = "Sem chave API do SpicyLyrics";
+spicylyrics_key_invalid = "Chave API do SpicyLyrics rejeitada";
+karaoke_word_synced_button = "Vista de letras personalizadas";
+amoled_theme = "Tema preto AMOLED";
+hide_jam_from_menu = "Ocultar Jam do menu";
+hide_jam_from_menu_description = "Remove \"Iniciar um Jam\" dos menus de contexto de música/playlist, do seletor de dispositivos e da fila.";
+block_rating_dialogs = "Bloquear diálogos de avaliação";
+block_rating_dialogs_description = "Suprime pedidos de estrelas da App Store e pedidos de avaliação na app.";
+hysan_recovery_fund = "Fundo de recuperação da Elsa do Hysan";
+hysan_recovery_fund_description = "O Hysan está apaixonado pela Elsa desde 2026 e não para de falar nisso. Cada café daqui financia a recuperação dele — e o mod. ☕";
+appIconTitle = "Escolher ícone";
+appIconSubtitle = "O iOS mostra uma confirmação na primeira vez. O ecrã principal pode demorar alguns segundos a atualizar.";
+appIconUnavailableMessage = "Este Spotify foi instalado a partir da App Store, por isso o iOS mantém o ícone do ecrã principal dentro do pacote assinado da app e não deixa o mod alterá-lo. Instala uma compilação IPA corrigida do EeveeSpotify — assinada com os ícones registados — e a troca funciona.";
+iconSelected = "Selecionado";
+iconTapToApply = "Toque para aplicar";
+prettifyIconNames = "Embelezar nomes de ícones";
+prettifyIconNamesDescription = "Converte sublinhados, hífenes e camelCase em espaços";

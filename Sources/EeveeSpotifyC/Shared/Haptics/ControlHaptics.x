@@ -20,8 +20,7 @@
 // :28) and so are the bar's titles (NowPlaying_BarImpl.InformationCollectionView, home/01.txt:1104);
 // a tick when a drag or its fling carries the list past halfway to the next page, where letting go skips.
 //
-// Gestures (Shared/Gestures) tell of each action a double tap performs; the lyrics page's tap to seek
-// plays its tap in Redesigned/Lyrics/EeveeRKaraokeView.m.
+// Gestures (Shared/Gestures) tell of each action a double tap performs.
 #import "Core/EeveeCore.h"
 #import "Shared/Gestures/Gestures.h"
 #import "Shared/Player/PlayerState.h"

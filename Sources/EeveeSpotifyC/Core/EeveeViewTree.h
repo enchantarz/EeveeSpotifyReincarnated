@@ -14,10 +14,6 @@ BOOL EeveeHasClass(UIView *root, NSString *marker);
 // Artwork, glyphs, text and thin lines (progress bar) keep their colour, everything else goes clear.
 BOOL EeveeKeepsColor(UIView *view);
 void EeveeStripBackgrounds(UIView *view);
-BOOL EeveeIsVisibleColor(CGColorRef color);
-BOOL EeveeIsLightColor(CGColorRef color);
 // Spotify's base surface: the neutral #121212 it paints its pages with, or the black AMOLED turns
 // that into.
 BOOL EeveeIsBaseSurface(CGColorRef color);
-// A painted, card-sized view: the now playing bar's card, for one.
-BOOL EeveeLooksLikeCard(UIView *view, CGColorRef color);

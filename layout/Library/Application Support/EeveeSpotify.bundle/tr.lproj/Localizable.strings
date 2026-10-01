@@ -296,3 +296,18 @@ managingSegmentsSectionDeps2 = "Ayarlar → 'Raporlama ve taslaklar' devam eden 
 categoriesTitle = "Kategoriler";
 categoriesSectionTitle1 = "Kategori bazlı eylemler";
 categoriesSectionDeps1 = "Kapalı = yok say. Göster = yalnızca çubuk üzerine çiz. Manuel = atlamadan önce sor. Otomatik = sessizce atla.";
+
+// Ported features: the SpicyLyrics karaoke view, the AMOLED black theme, the Jam/rating
+// toggles, Hysan's recovery fund, and the app-icon picker.
+spicylyrics_description = "SpicyLyrics kelime kelime karaoke sözleri sağlar.";
+spicylyrics_key_missing = "SpicyLyrics API anahtarı yok";
+spicylyrics_key_invalid = "SpicyLyrics API anahtarı reddedildi";
+karaoke_word_synced_button = "Özel Şarkı Sözleri görünümü";
+amoled_theme = "AMOLED Siyah Tema";
+hide_jam_from_menu = "Jam'ı menüden gizle";
+hide_jam_from_menu_description = "Şarkı/çalma listesi bağlam menülerinden, cihaz seçiciden ve kuyruktan \"Jam Başlat\"ı kaldırır.";
+block_rating_dialogs = "Uygulama puanlama pencerelerini engelle";
+block_rating_dialogs_description = "App Store yıldız puanlama isteklerini ve uygulama içi inceleme isteklerini bastırır.";
+hysan_recovery_fund = "Hysan'ın Elsa İyileşme Fonu";
+hysan_recovery_fund_description = "Hysan 2026'dan beri Elsa'ya âşık ve bundan konuşmayı bırakmıyor. Buradaki her kahve onun iyileşmesini — ve modu — finanse ediyor. ☕";
+appIconUnavailableMessage = "Bu Spotify App Store'dan kuruldu, bu yüzden iOS ana ekran simgesini uygulamanın imzalı paketi içinde tutar ve modun değiştirmesine izin vermez. EeveeSpotify'nin yamalı bir IPA derlemesini kurun — simgeler kayıtlı şekilde imzalı — ve değiştirme çalışır.";

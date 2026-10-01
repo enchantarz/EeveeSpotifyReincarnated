@@ -10,5 +10,4 @@ void EeveeHideGlassFrom(UIView *host, NSUInteger count);
 // Glass takes its shape from cornerConfiguration on iOS 26; layer.cornerRadius is the fallback.
 void EeveeShapeGlass(UIView *glass, CGFloat radius, BOOL capsule);
 
-// The areas each look keeps transparent are its own: Native/Appearance/Repaint.h and
-// Redesigned/Kit/EeveeRRepaint.h.
+// The areas kept transparent are Native/Appearance/Repaint.h's.

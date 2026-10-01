@@ -139,3 +139,24 @@ play_songs_in_any_order = "Geet lai junsukai order ma play garne";
 organize_listening_queue = "Listening queue lai organize garne";
 
 payment_notice = "EeveeSpotify le patches apply garchha certain Premium subidha unlock garna ko lagi. Yo free chha.";
+
+// Ported features: the SpicyLyrics karaoke view, the AMOLED black theme, the Jam/rating
+// toggles, Hysan's recovery fund, and the app-icon picker.
+spicylyrics_description = "SpicyLyrics शब्द-शब्द क्याराओके गीतहरू उपलब्ध गर्छ।";
+spicylyrics_key_missing = "SpicyLyrics API कुञ्जी छैन";
+spicylyrics_key_invalid = "SpicyLyrics API कुञ्जी अस्वीकृत भयो";
+karaoke_word_synced_button = "अनुकूलन गीत दृश्य";
+amoled_theme = "AMOLED कालो थिम";
+hide_jam_from_menu = "मेनुबाट Jam लुकाउनुहोस्";
+hide_jam_from_menu_description = "गीत/प्ले सूचीका सन्दर्भ मेनु, यन्त्र छनोट र लाइनबाट \"Jam सुरु गर्नुहोस्\" हटाउँछ।";
+block_rating_dialogs = "एप मूल्याङ्कन संवाद रोक्नुहोस्";
+block_rating_dialogs_description = "App Store का तारा मूल्याङ्कन अनुरोध र एपभित्रका समीक्षा अनुरोध दबाउँछ।";
+hysan_recovery_fund = "हिसानको एल्सा स्वास्थ्य कोष";
+hysan_recovery_fund_description = "हिसान २०२६ देखि एल्सामाथि मोहित छ र त्यसैको कुरा गर्न छोड्दैन। यहाँको हरेक कफीले उसको स्वास्थ्य — र मोड — को खर्च बोक्छ। ☕";
+appIconTitle = "आइकन छान्नुहोस्";
+appIconSubtitle = "iOS ले पहिलो पटक पुष्टि देखाउँछ। गृह स्क्रिन रिफ्रेस हुन केही सेकेन्ड लाग्न सक्छ।";
+appIconUnavailableMessage = "यो Spotify App Store बाट स्थापना भएको हुनाले iOS ले गृह स्क्रिन आइकन एपको हस्ताक्षरित बन्डलभित्रै राख्छ र मोडले बदल्न दिँदैन। EeveeSpotify को प्याच गरिएको IPA भर्सन — दर्ता आइकनसहित हस्ताक्षरित — स्थापना गर्नुहोस्, अनि परिवर्तनले काम गर्छ।";
+iconSelected = "छानिएको";
+iconTapToApply = "लागू गर्न थिच्नुहोस्";
+prettifyIconNames = "आइकन नाम सुन्दर बनाउनुहोस्";
+prettifyIconNamesDescription = "अन्डरस्कोर, हाइफन र camelCase लाई खाली ठाउँमा बदल्छ";

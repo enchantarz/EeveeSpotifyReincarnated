@@ -296,3 +296,18 @@ managingSegmentsSectionDeps2 = "設定 → 「回報和草稿」將會儲存您�
 categoriesTitle = "分類";
 categoriesSectionTitle1 = "分類動作";
 categoriesSectionDeps1 = "關閉 = 忽略，顯示 = 僅在進度列上顯示片段，手動 = 跳過前詢問，自動 = 直接跳過";
+
+// Ported features: the SpicyLyrics karaoke view, the AMOLED black theme, the Jam/rating
+// toggles, Hysan's recovery fund, and the app-icon picker.
+spicylyrics_description = "SpicyLyrics 提供逐字卡拉OK歌詞。";
+spicylyrics_key_missing = "沒有 SpicyLyrics API 金鑰";
+spicylyrics_key_invalid = "SpicyLyrics API 金鑰被拒絕";
+karaoke_word_synced_button = "自訂歌詞檢視";
+amoled_theme = "AMOLED 純黑主題";
+hide_jam_from_menu = "在選單中隱藏 Jam";
+hide_jam_from_menu_description = "從曲目/播放清單內容選單、裝置選擇器與佇列中移除「開始 Jam」。";
+block_rating_dialogs = "封鎖應用程式評分對話框";
+block_rating_dialogs_description = "攔截 App Store 星級評分提示與應用程式內評論請求。";
+hysan_recovery_fund = "Hysan 的 Elsa 康復基金";
+hysan_recovery_fund_description = "Hysan 從 2026 年起就一直迷戀 Elsa，唸個不停。這裡的每一杯咖啡都為他的康復——以及這個外掛——買單。☕";
+appIconUnavailableMessage = "這個 Spotify 是從 App Store 安裝的，iOS 會把主畫面圖示保存在應用程式的簽名套件內，不允許外掛變更。安裝修補過的 EeveeSpotify IPA 版本（簽名時已註冊圖示）即可正常切換。";

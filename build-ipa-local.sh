@@ -1,19 +1,14 @@
 #!/usr/bin/env bash
-# Local IPA build — mirror of .github/workflows/main.yml. Produces an IPA
-# you can sign with Sideloadly/AltStore/TrollStore.
+# Local IPA build, kept for the old command. The pipeline itself lives in
+# Scripts/build-merged-ipa.sh — the flags table, make package, the Live Activity appex, cyan,
+# zxPluginsInject, App Intents metadata, the alternate app icons and the verification — and this
+# wrapper just runs all of it, then drops the result where this script's outputs always landed.
 #
-# Pipeline:
-#   1. Build EeveeSwiftProtobuf.framework from apple/swift-protobuf source
-#      (renamed module — see Tools/SwiftProtobufBuild/).
-#   2. theos `make package FINALPACKAGE=1` — produces .deb with
-#      EeveeSpotify.dylib + EeveeSpotify.bundle + framework.
-#   3. Build zxPluginsInject.dylib — sideload compat shim (keychain redirect,
-#      group containers, CloudKit stub). LC-injected via ipapatch in step 6.
-#   4. cyan inject deb-contents (dylib + framework + bundle) into vanilla IPA.
-#   5. ipapatch LC-inject zxPluginsInject into main exec + every appex.
-#   6. Strip Watch.app if it survived cyan -du.
+#   ./build-ipa-local.sh <vanilla Spotify.ipa>
 #
-# Requires: theos, cyan (pyzule-rw), ipapatch, dpkg, ldid, plutil.
+# Replaces the six-step pipeline that used to live here: it had drifted out of the build (no
+# flags table, no Live Activity appex, no App Intents merge, no icons) and mirrored a workflow
+# (main.yml) that no longer exists.
 
 set -euo pipefail
 
@@ -24,62 +19,12 @@ VANILLA_IPA="${1:-}"
 }
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$REPO_DIR"
 
-[ -n "${THEOS:-}" ] || { [ -d "$HOME/theos" ] && export THEOS="$HOME/theos" || { echo "THEOS not set"; exit 1; }; }
-
-VERSION=$(grep -E '^Version:' control | awk '{print $2}')
+# The merged pipeline prints its own nine steps; this only keeps the output naming this entry
+# point always had: Outputs/IPAS/EeveeSpotify-<tweak version>-<Spotify version>.ipa.
+VERSION=$(grep -E '^Version:' "$REPO_DIR/control" | awk '{print $2}')
 SPOT_VERSION=$(unzip -p "$VANILLA_IPA" 'Payload/Spotify.app/Info.plist' \
     | plutil -extract CFBundleShortVersionString raw - 2>/dev/null || echo "unknown")
-OUT_DIR="Outputs/IPAS"
-OUT_IPA="$OUT_DIR/EeveeSpotify-${VERSION}-${SPOT_VERSION}.ipa"
-mkdir -p "$OUT_DIR"
 
-color() { printf '\033[1;32m==> %s\033[0m\n' "$*"; }
-
-color "1/6  EeveeSwiftProtobuf.framework"
-chmod +x Tools/SwiftProtobufBuild/build-eeveeswiftprotobuf.sh
-Tools/SwiftProtobufBuild/build-eeveeswiftprotobuf.sh
-
-color "2/6  theos make package"
-THEOS_PACKAGE_SCHEME=rootless make package FINALPACKAGE=1
-DEB_FILE=$(ls -t packages/com.eevee.spotify_*.deb 2>/dev/null | head -1)
-[ -n "$DEB_FILE" ] || { echo "deb not produced"; exit 1; }
-
-color "3/6  zxPluginsInject.dylib"
-chmod +x Tools/build-zxpi.sh
-Tools/build-zxpi.sh >/dev/null
-
-color "4/6  extract deb"
-DEB_EXTRACT="$REPO_DIR/Outputs/deb-extract"
-rm -rf "$DEB_EXTRACT"; mkdir -p "$DEB_EXTRACT"
-dpkg-deb -R "$DEB_FILE" "$DEB_EXTRACT"
-DYLIB_SRC=$(find "$DEB_EXTRACT" -name 'EeveeSpotify.dylib' | head -1)
-BUNDLE_SRC=$(find "$DEB_EXTRACT" -type d -name 'EeveeSpotify.bundle' | head -1)
-FRAMEWORK_SRC=$(find "$DEB_EXTRACT" -type d -name 'EeveeSwiftProtobuf.framework' | head -1)
-[ -n "$DYLIB_SRC" ] || { echo "dylib not in deb"; exit 1; }
-
-color "5/6  cyan inject"
-INJECT=("$DYLIB_SRC")
-[ -n "$FRAMEWORK_SRC" ] && INJECT+=("$FRAMEWORK_SRC")
-[ -n "$BUNDLE_SRC" ]    && INJECT+=("$BUNDLE_SRC")
-rm -f "$OUT_IPA"
-cyan -i "$VANILLA_IPA" -o "$OUT_IPA" -f "${INJECT[@]}" -c 9 -m 15.0 -du
-
-color "6/6  ipapatch LC-inject zxPluginsInject"
-ipapatch --input "$OUT_IPA" --inplace --noconfirm --dylib packages/zxPluginsInject.dylib
-
-# Belt-and-suspenders: cyan -du strips appex/Watch but verify.
-cd "$OUT_DIR"
-rm -rf Payload
-unzip -q "$(basename "$OUT_IPA")"
-if [ -d "Payload/Spotify.app/Watch" ]; then
-    rm -rf Payload/Spotify.app/Watch
-    zip -qry "$(basename "$OUT_IPA")" Payload
-fi
-rm -rf Payload
-cd - >/dev/null
-
-color "Done"
-ls -lh "$OUT_IPA"
-echo "Sign with Sideloadly / AltStore / TrollStore."
+exec "$REPO_DIR/Scripts/build-merged-ipa.sh" "$VANILLA_IPA" \
+    "$REPO_DIR/Outputs/IPAS/EeveeSpotify-${VERSION}-${SPOT_VERSION}.ipa"

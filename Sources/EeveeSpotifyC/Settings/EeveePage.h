@@ -8,5 +8,3 @@
 void EeveeRegisterPages(void);
 // Pushes the page if it can go on Spotify's stack, presents it otherwise.
 void EeveeShowPage(UIViewController *owner, UIViewController *page);
-// The ported settings page, which EeveeSpotify's own menu pushes (App/ModSettings.x).
-UIViewController *EeveeSpotipwSettingsPage(void);

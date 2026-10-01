@@ -1,19 +1,23 @@
 import SwiftUI
 import UIKit
 // EeveeSpotipwSettingsPage() is declared in Sources/EeveeSpotifyC/include/EeveeSpotipw.h, which the
-// umbrella module exports to Swift.
+// umbrella module exports to Swift, along with the EeveeModPage it hands back.
 import EeveeSpotifyC
 
 /// The ported spoti.pw settings page, as a SwiftUI row's destination.
 ///
-/// `EeveeSpotipwSettingsPage()` is a UITableViewController, so it is hosted rather than rebuilt: it
-/// is pushed onto EeveeSpotify's own navigation stack, which is also the stack its sub-pages
-/// (Navbar, Player, Audio effects, Labs, All flags) push onto, so the whole ported tree navigates
-/// normally underneath EeveeSpotify's settings.
-struct EeveeSpotipwPageHost: UIViewControllerRepresentable {
-    func makeUIViewController(context: Context) -> UIViewController {
-        EeveeSpotipwSettingsPage()
-    }
+/// The page comes back as an `EeveeModPage` — the page as data: its sections, the rows in them and
+/// what each row is — so it is drawn by `EeveeModPageView` in SwiftUI, the same way EeveeSpotify's own
+/// pages are. It used to be hosted instead, as the `UITableViewController` it was written to be, which
+/// is why its rows drew at a different size and in a different style from the menu that opened it.
+struct EeveeSpotipwSettingsView: View {
+    let navigationController: UINavigationController
 
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
+    /// Built once: the ported page reads its sections out of the stored switches as it is made, and a
+    /// fresh one per redraw would rebuild them. Its sub-pages go through the same renderer.
+    @State private var page = EeveeSpotipwSettingsPage()
+
+    var body: some View {
+        EeveeModPageView(page: page, navigationController: navigationController)
+    }
 }

@@ -393,7 +393,7 @@ static UIView *valueAndChevron(NSString *text) {
     label.textColor = EeveeGrey();
     label.text = text;
     [label sizeToFit];
-    UIImageView *chevron = EeveeSymbolView(@"chevron.right", 13, UIImageSymbolWeightSemibold, 16);
+    UIImageView *chevron = EeveeChevronView();
     CGFloat height = MAX(label.bounds.size.height, chevron.bounds.size.height);
     UIView *box = [[UIView alloc] initWithFrame:CGRectMake(0, 0, label.bounds.size.width + 6 + chevron.bounds.size.width, height)];
     label.center = CGPointMake(label.bounds.size.width / 2, height / 2);
@@ -645,7 +645,7 @@ static UIView *valueAndChevron(NSString *text) {
     CGFloat titleWidth = ceil([title sizeWithAttributes:@{NSFontAttributeName: EeveeTitleFont()}].width);
     BOOL fits = 16 + titleWidth + 16 + accessory.bounds.size.width + 16 <= card;
     EeveeFillCell(cell, title, fits ? nil : value, nil, nil);
-    cell.accessoryView = fits ? accessory : EeveeSymbolView(@"chevron.right", 13, UIImageSymbolWeightSemibold, 16);
+    cell.accessoryView = fits ? accessory : EeveeChevronView();
     cell.accessibilityValue = value;
     cell.selectionStyle = UITableViewCellSelectionStyleDefault;
     cell.separatorInset = UIEdgeInsetsMake(0, 16, 0, 0);

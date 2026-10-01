@@ -286,3 +286,20 @@ managingSegmentsSectionDeps2 = "Cài đặt ➔ 'Báo cáo & bản nháp' lưu g
 categoriesTitle = "Các danh mục";
 categoriesSectionTitle1 = "Hành động theo từng danh mục";
 categoriesSectionDeps1 = "Tắt = bỏ qua. Hiển thị = chỉ vẽ trên thanh tiến trình. Thủ công = nhắc trước khi bỏ qua. Tự động = bỏ qua trong im lặng.";
+
+// Ported features: the SpicyLyrics karaoke view, the AMOLED black theme, the Jam/rating
+// toggles, Hysan's recovery fund, and the app-icon picker.
+spicylyrics_description = "SpicyLyrics cung cấp lời karaoke theo từng từ.";
+spicylyrics_key_missing = "Chưa có khóa API SpicyLyrics";
+spicylyrics_key_invalid = "Khóa API SpicyLyrics bị từ chối";
+karaoke_word_synced_button = "Xem lời bài hát tùy chỉnh";
+amoled_theme = "Chủ đề đen AMOLED";
+hide_jam_from_menu = "Ẩn Jam khỏi menu";
+hide_jam_from_menu_description = "Loại bỏ \"Bắt đầu Jam\" khỏi menu ngữ cảnh của bài hát/danh sách, bộ chọn thiết bị và hàng đợi.";
+block_rating_dialogs = "Chặn hộp thoại đánh giá";
+block_rating_dialogs_description = "Chặn các yêu cầu xếp hạng sao từ App Store và yêu cầu đánh giá trong ứng dụng.";
+hysan_recovery_fund = "Quỹ hồi phục Elsa của Hysan";
+hysan_recovery_fund_description = "Hysan đã thích Elsa từ 2026 và không ngừng nói về chuyện đó. Mỗi ly cà phê ở đây tài trợ cho sự hồi phục của cậu ấy — và của mod. ☕";
+appIconUnavailableMessage = "Spotify này được cài đặt từ App Store, nên iOS giữ biểu tượng màn hình chính bên trong gói đã ký của ứng dụng và không cho mod thay đổi. Cài đặt bản IPA đã vá của EeveeSpotify — được ký với các biểu tượng đã đăng ký — thì việc đổi sẽ hoạt động.";
+prettifyIconNames = "Làm đẹp tên biểu tượng";
+prettifyIconNamesDescription = "Chuyển gạch dưới, gạch nối và camelCase thành khoảng trắng";

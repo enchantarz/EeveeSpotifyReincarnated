@@ -22,7 +22,9 @@ If you are reporting a crash or a feature regression, include the Spotify build 
 
 If you want to test a change yourself, there are a few paths already in the repo:
 
-- `setup-build-ipa.sh` / `build-ipa-local.sh` for IPA-style builds
+- `./build-ipa-local.sh <vanilla Spotify.ipa>` for an IPA — it runs
+  `Scripts/build-merged-ipa.sh`, the canonical pipeline (deb, Live Activity appex,
+  alternate app icons and verification included)
 - `make package` for building a `.deb`
 
 Some builds also need a locally built `EeveeSwiftProtobuf.framework`. The Makefile documents that with the `build-eeveeswiftprotobuf` target, and the CI workflows do the same thing before packaging.

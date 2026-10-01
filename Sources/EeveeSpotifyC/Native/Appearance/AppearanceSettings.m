@@ -21,10 +21,10 @@ static void chooseAccent(void) {
     [top presentViewController:sheet animated:YES completion:nil];
 }
 
-// The native look's rows of the Appearance card (App/Pages.m).
+// The native look's rows of the Appearance card (App/Pages.m). The AMOLED row that used to lead it
+// is gone: the theme is EeveeSpotify's own now, toggled under Customization (EeveeUISettingsView).
 NSArray<EeveeModRow *> *EeveeNativeAppearanceRows(void) {
     return @[
-        EeveeWithSymbol(EeveeOptionRow(@"AMOLED background", nil, EeveeKeyAmoled), @"moon"),
         EeveeWithSymbol(EeveeStatActionRow(@"Accent colour", nil, ^NSString *{ return EeveeAccentLabel(); }, ^{ chooseAccent(); }), @"paintpalette"),
     ];
 }

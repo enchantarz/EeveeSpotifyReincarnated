@@ -3,6 +3,10 @@ name: Build rootless + RootHide .debs + Draft Release
 on:
   workflow_dispatch:
     inputs:
+      ipa_url:
+        description: "URL to a decrypted Spotify IPA (used to generate the flags table)"
+        required: true
+        type: string
       tag:
         description: "Git tag to create/use for the draft release (e.g. v6.6.3.1)"
         required: true
@@ -89,6 +93,13 @@ jobs:
             -o "$RUNNER_TEMP/bundled-configuration-policy-tests"
           "$RUNNER_TEMP/bundled-configuration-policy-tests"
           python3 Tests/ResolveConfigurationSnapshot/test.py
+
+      # EeveeFlagList.m is generated from the IPA, not committed; without it the link has no
+      # EeveeFlagTable. This is why the workflow takes an ipa_url.
+      - name: Generate the flags table from the IPA
+        run: |
+          curl -fL "${{ inputs.ipa_url }}" -o "${{ github.workspace }}/spotify.ipa"
+          python3 Scripts/extract-flags.py "${{ github.workspace }}/spotify.ipa"
 
       - name: Build ${{ matrix.label }} .deb
         env:

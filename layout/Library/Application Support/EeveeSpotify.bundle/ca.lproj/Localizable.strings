@@ -153,3 +153,24 @@ no_debug_log_found = "No s'ha trobat l'arxiu de depuració. El registre comença
 no_debug_log_found_ok = "D'acord";
 debug_section_footer = "Exporta o neteja l'arxiu de depuració.";
 
+
+// Ported features: the SpicyLyrics karaoke view, the AMOLED black theme, the Jam/rating
+// toggles, Hysan's recovery fund, and the app-icon picker.
+spicylyrics_description = "SpicyLyrics ofereix lletres de karaoke paraula per paraula.";
+spicylyrics_key_missing = "Sense clau API de SpicyLyrics";
+spicylyrics_key_invalid = "Clau API de SpicyLyrics rebutjada";
+karaoke_word_synced_button = "Vista de lletres personalitzades";
+amoled_theme = "Tema negre AMOLED";
+hide_jam_from_menu = "Amaga Jam del menú";
+hide_jam_from_menu_description = "Elimina \"Inicia un Jam\" dels menús contextuals de cançó/llista, del selector de dispositius i de la cua.";
+block_rating_dialogs = "Bloca els diàlegs de valoració";
+block_rating_dialogs_description = "Suprimeix les peticions d'estrelles de l'App Store i les peticions de ressenya integrades.";
+hysan_recovery_fund = "Fons de recuperació de l'Elsa d'en Hysan";
+hysan_recovery_fund_description = "En Hysan està enamorat de l'Elsa des del 2026 i no para de parlar-hi. Cada cafè d'aquí finança la seva recuperació — i el mod. ☕";
+appIconTitle = "Tria la icona";
+appIconSubtitle = "L'iOS mostra una confirmació el primer cop. La pantalla d'inici pot trigar uns segons a actualitzar-se.";
+appIconUnavailableMessage = "Aquest Spotify s'ha instal·lat des de l'App Store, així que l'iOS manté la seva icona de la pantalla d'inici dins del paquet signat de l'aplicació i no deixa que el mod la canviï. Instal·la un IPA parchejat d'EeveeSpotify — signat amb les icones registrades — i el canvi funciona.";
+iconSelected = "Seleccionada";
+iconTapToApply = "Toca per aplicar";
+prettifyIconNames = "Embelleix els noms de les icones";
+prettifyIconNamesDescription = "Converteix guions baixos, guions i camelCase en espais";

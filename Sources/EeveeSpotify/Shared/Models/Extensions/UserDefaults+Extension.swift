@@ -5,6 +5,7 @@ extension UserDefaults {
     
     private static let musixmatchTokenKey = "musixmatchToken"
     private static let darkPopUpsKey = "darkPopUps"
+    private static let amoledThemeKey = "amoledTheme"
     private static let patchTypeKey = "patchType"
     private static let trueShuffleEnabledKey = "trueShuffleEnabled"
     private static let overwriteConfigurationKey = "overwriteConfiguration"
@@ -15,6 +16,8 @@ extension UserDefaults {
     private static let cachedCustomizeDataKey = "eeveeCachedCustomizeData"
     private static let iconNamePrettifyKey = "iconNamePrettify"
     private static let cleanShareLinksKey = "cleanShareLinks"
+    private static let hideJamFromMenuKey = "hideJamFromMenu"
+    private static let blockRatingDialogsKey = "blockRatingDialogs"
 
     static var musixmatchToken: String {
         get {
@@ -22,6 +25,17 @@ extension UserDefaults {
         }
         set (token) {
             container.set(token, forKey: musixmatchTokenKey)
+        }
+    }
+
+    /// The AMOLED Black Theme (AmoledTheme.x.swift): opaque, neutral dark backgrounds go true black.
+    /// Read once at launch, since an Orion hook group cannot be deactivated in the running process.
+    static var amoledTheme: Bool {
+        get {
+            container.object(forKey: amoledThemeKey) as? Bool ?? false
+        }
+        set (amoledTheme) {
+            container.set(amoledTheme, forKey: amoledThemeKey)
         }
     }
 
@@ -115,6 +129,26 @@ extension UserDefaults {
         }
         set (cleanShareLinks) {
             container.set(cleanShareLinks, forKey: cleanShareLinksKey)
+        }
+    }
+
+    /// When true, "Start a Jam" is removed from context menus, device picker, and queue.
+    static var hideJamFromMenu: Bool {
+        get {
+            container.object(forKey: hideJamFromMenuKey) as? Bool ?? true
+        }
+        set (hideJamFromMenu) {
+            container.set(hideJamFromMenu, forKey: hideJamFromMenuKey)
+        }
+    }
+
+    /// When true, App Store review dialogs and in-app rating prompts are suppressed.
+    static var blockRatingDialogs: Bool {
+        get {
+            container.object(forKey: blockRatingDialogsKey) as? Bool ?? true
+        }
+        set (blockRatingDialogs) {
+            container.set(blockRatingDialogs, forKey: blockRatingDialogsKey)
         }
     }
 }

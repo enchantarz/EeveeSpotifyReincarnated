@@ -10,10 +10,9 @@
 // Player, Audio effects), and All flags, a searchable list of every flag with an override per flag.
 // The switches are read when their tweaks run, so a change shows after a restart.
 //
-// Dropped in the merge, all of it spoti.pw's own: the Redesigned UI switch (the Liquid Glass look
-// is always on, so there is nothing to toggle), the Premium/ads page (EeveeSpotify's ad blocking
-// owns that), Live Activity (it ships as a widget extension, not in this dylib), the updates page
-// and the donate row.
+// Dropped in the merge, all of it spoti.pw's own: the Liquid Glass redesign (removed entirely, so
+// there is no look to switch to), the Premium/ads page (EeveeSpotify's ad blocking owns that), Live
+// Activity (it ships as a widget extension, not in this dylib), the updates page and the donate row.
 
 #import "Core/EeveeCore.h"
 #import "Settings/EeveePage.h"
@@ -23,21 +22,14 @@
 #import "Shared/Flags/Flags.h"
 #import "Shared/JamesDSP/JamesDSPPage.h"
 #import "Shared/LiveActivity/LiveActivity.h"
-#import "App/About/About.h"
 #import "Pages.h"
 
 static EeveeModRow *pageRow(NSString *title, NSString *symbol, UIViewController *(^page)(void)) {
     return EeveeWithSymbol(EeveePageRow(title, page), symbol);
 }
 
-UIViewController *EeveeSpotipwSettingsPage(void) {
+EeveeModPage *EeveeSpotipwSettingsPage(void) {
     NSMutableArray<EeveeModSection *> *sections = [NSMutableArray array];
-    // A build the lock screen cannot open leads the page, above the tweaks: it is the one thing here
-    // that no switch can put right, and it is worth reading before anything else.
-    EeveeModRow *signing = EeveeSigningWarningRow();
-    if (signing) [sections addObject:EeveeSection(nil, @[signing])];
-    EeveeModRow *mod = pageRow(@"Mod", @"info.circle", ^UIViewController *{ return EeveeAboutPage(); });
-    mod.value = ^NSString *{ return @(EEVEE_SPOTIPW_VERSION); };
     // JamesDSP works on the sound, so both looks have it, with what it is doing beside the chevron.
     EeveeModRow *audioEffects = pageRow(@"Audio effects", @"slider.vertical.3", ^UIViewController *{ return EeveeDSPSettingsPage(); });
     audioEffects.value = ^NSString *{ return EeveeDSPSummary(); };
@@ -62,7 +54,6 @@ UIViewController *EeveeSpotipwSettingsPage(void) {
         ]),
         EeveeSection(nil, @[
             pageRow(@"All flags", @"flag", ^UIViewController *{ return EeveeAllFlagsPage(); }),
-            mod,
         ]),
     ]];
     return [[EeveeModPage alloc] initWithTitle:@"EeveeSpotify" intro:nil sections:sections footer:nil];
@@ -71,5 +62,4 @@ UIViewController *EeveeSpotipwSettingsPage(void) {
 %ctor {
     %init;
     EeveeRegisterPages();
-    EeveeCheckSigningOnce();
 }

@@ -102,3 +102,24 @@ request_anonymous_token = "Anonim token istə";
 request_anonymous_token_description = "Musixmatch-dan anonim token almaq üçün 'Anonim token istə' düyməsinə toxunun.";
 
 lrclib_api = "Server ünvanı";
+
+// Ported features: the SpicyLyrics karaoke view, the AMOLED black theme, the Jam/rating
+// toggles, Hysan's recovery fund, and the app-icon picker.
+spicylyrics_description = "SpicyLyrics söz-söz karaoke mətnləri təqdim edir.";
+spicylyrics_key_missing = "SpicyLyrics API açarı yoxdur";
+spicylyrics_key_invalid = "SpicyLyrics API açarı rədd edildi";
+karaoke_word_synced_button = "Fərdi mətn görünüşü";
+amoled_theme = "AMOLED qara teması";
+hide_jam_from_menu = "Jam-ı menüden gizlət";
+hide_jam_from_menu_description = "Trek/pleylist kontekst menyularından, cihaz seçicisindən və növbədən \"Jam Başlat\"ı çıxarır.";
+block_rating_dialogs = "Tətbiq reytinq dialoqlarını blokla";
+block_rating_dialogs_description = "App Store ulduz reytinq sorğularını və tətbiq daxili rəy sorğularını basır.";
+hysan_recovery_fund = "Hysanın Elsa sağalma fondu";
+hysan_recovery_fund_description = "Hysan 2026-cı ildən bəri Elsa'ya aşiqdir və bundan danışmağı dayandırmır. Buradaki hər fincan qəhvə onun sağalmasını — və modu maliyyələşdirir. ☕";
+appIconTitle = "İşarə seç";
+appIconSubtitle = "iOS ilk dəfə təsdiq göstərəcək. Ana ekranın yenilənməsi bir neçə saniyə çəkə bilər.";
+appIconUnavailableMessage = "Bu Spotify App Store-dan quraşdırılıb, ona görə iOS ana ekran işarəsini tətbiqin imzalanmış paketində saxlayır və modun dəyişməsinə icazə vermir. EeveeSpotify-nin yamalanmış IPA qurasdırın — işarələr qeydiyyatlı imzalanmış — və dəyişmə işləyir.";
+iconSelected = "Seçilib";
+iconTapToApply = "Tətbiq etmək üçün toxun";
+prettifyIconNames = "İşarə adlarını gözəlləşdir";
+prettifyIconNamesDescription = "Alt xəttləri, defisləri və camelCase-i boşluqlara çevirir";

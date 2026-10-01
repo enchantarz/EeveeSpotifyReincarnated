@@ -151,3 +151,24 @@ debug_log_cleared_ok = "Vale";
 no_debug_log_found = "No se encontró archivo de depuración. El registro comienza a grabarse cuando se inicia la aplicación.";
 no_debug_log_found_ok = "Vale";
 debug_section_footer = "Exportar o limpiar el archivo de depuración.";
+
+// Ported features: the SpicyLyrics karaoke view, the AMOLED black theme, the Jam/rating
+// toggles, Hysan's recovery fund, and the app-icon picker.
+spicylyrics_description = "SpicyLyrics ofrece letras de karaoke palabra por palabra.";
+spicylyrics_key_missing = "Sin clave API de SpicyLyrics";
+spicylyrics_key_invalid = "Clave API de SpicyLyrics rechazada";
+karaoke_word_synced_button = "Vista de letras personalizadas";
+amoled_theme = "Tema negro AMOLED";
+hide_jam_from_menu = "Ocultar Jam del menú";
+hide_jam_from_menu_description = "Elimina \"Iniciar un Jam\" de los menús contextuales de canciones/listas, del selector de dispositivos y de la cola.";
+block_rating_dialogs = "Bloquear diálogos de valoración";
+block_rating_dialogs_description = "Suprime las peticiones de estrellas del App Store y las solicitudes de opinión integrada.";
+hysan_recovery_fund = "Fondo de recuperación de Elsa de Hysan";
+hysan_recovery_fund_description = "Hysan está enamorado de Elsa desde 2026 y no para de hablar de ello. Cada café de aquí financia su recuperación — y el mod. ☕";
+appIconTitle = "Elegir icono";
+appIconSubtitle = "iOS muestra una confirmación la primera vez. La pantalla de inicio puede tardar unos segundos en actualizarse.";
+appIconUnavailableMessage = "Este Spotify se instaló desde el App Store, así que iOS mantiene su icono de pantalla de inicio dentro del paquete firmado de la app y no deja que el mod lo cambie. Instala un IPA parcheado de EeveeSpotify — firmado con los iconos registrados — y el cambio funciona.";
+iconSelected = "Seleccionado";
+iconTapToApply = "Toca para aplicar";
+prettifyIconNames = "Embellecer nombres de iconos";
+prettifyIconNamesDescription = "Convierte guiones bajos, guiones y camelCase en espacios";

@@ -25,9 +25,6 @@ id EeveeFlagOverride(NSString *key);
 void EeveeSetFlagOverride(NSString *key, id value);
 
 // Moves a stored setting to another key, once: nothing happens unless `from` is set and `to` is not.
-// A feature that leaves Redesigned/ for Shared/ loses the ".redesign." from its keys this way, so the
-// switch someone already flipped is still the one they get.
+// A renamed feature's keys come over this way, so the switch someone already flipped is still the one
+// they get.
 void EeveeMigrateKey(NSString *from, NSString *to);
-
-// Quits Spotify so the hooks read the switches afresh on the next launch; the writes reach cfprefsd first.
-void EeveeRestartSpotify(void);

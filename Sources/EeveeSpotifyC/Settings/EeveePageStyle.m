@@ -1,11 +1,13 @@
 #import "EeveePageStyle.h"
 #import "Core/EeveeCore.h"
 
-static UIFont *eevee_titleFont, *eevee_subtitleFont;
-
-UIColor *EeveeGrey(void) { return [UIColor colorWithWhite:0xB3 / 255.0 alpha:1]; }
-UIFont *EeveeTitleFont(void) { return eevee_titleFont ?: [UIFont systemFontOfSize:13 weight:UIFontWeightBold]; }
-UIFont *EeveeSubtitleFont(void) { return eevee_subtitleFont ?: [UIFont systemFontOfSize:11]; }
+// The system's own sizes, read at the moment of use so a page built before the reader changed their
+// text size still comes out at the size they set. SwiftUI's List draws a 17pt body title over a 13pt
+// footnote subtitle; the ported pages drew 13pt bold over 11pt, which is what made them read as a
+// second, smaller screen inside the same menu.
+UIColor *EeveeGrey(void) { return UIColor.secondaryLabelColor; }
+UIFont *EeveeTitleFont(void) { return [UIFont preferredFontForTextStyle:UIFontTextStyleBody]; }
+UIFont *EeveeSubtitleFont(void) { return [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]; }
 
 UIImageView *EeveeSymbolView(NSString *name, CGFloat size, UIImageSymbolWeight weight, CGFloat box) {
     UIImage *image = [UIImage systemImageNamed:name withConfiguration:[UIImageSymbolConfiguration configurationWithPointSize:size weight:weight]];
@@ -13,6 +15,14 @@ UIImageView *EeveeSymbolView(NSString *name, CGFloat size, UIImageSymbolWeight w
     view.tintColor = UIColor.whiteColor;
     view.contentMode = UIViewContentModeCenter;
     view.frame = CGRectMake(0, 0, box, box);
+    return view;
+}
+
+// A row's chevron. SwiftUI draws its own in .tertiaryLabel, 14pt semibold; this is the same glyph at
+// the size the ported rows used, in the colour SwiftUI would use, so the two agree at a glance.
+UIImageView *EeveeChevronView(void) {
+    UIImageView *view = EeveeSymbolView(@"chevron.right", 13, UIImageSymbolWeightSemibold, 16);
+    view.tintColor = UIColor.tertiaryLabelColor;
     return view;
 }
 
@@ -67,28 +77,26 @@ void EeveeInsetForBars(UITableView *table) {
     table.verticalScrollIndicatorInsets = inset;
 }
 
-// The pages follow the running look's black and accent colour, read here by their keys so the page
-// framework depends on no layer: the native look's AMOLED switch and accent (Native/Appearance), or the
-// redesign's accent (Redesigned/Kit/EeveeRAccent.h), which is always black.
-static NSString *const kAmoledKey = @"EeveeSpotify.amoled";
+// The pages follow Spotify's own background and accent colour, read here by their keys so the page
+// framework depends on no layer: Native/Appearance's AMOLED switch and accent picker write them.
 static NSString *const kAccentKey = @"EeveeSpotify.accent";
-static NSString *const kRedesignAccentKey = @"EeveeSpotify.redesign.accent";
 
 static UIColor *lookAccent(void) {
-    NSInteger rgb = EeveeInt(EeveeRedesignedUI() ? kRedesignAccentKey : kAccentKey, -1);
+    NSInteger rgb = EeveeInt(kAccentKey, -1);
     if (rgb < 0 || rgb > 0xFFFFFF) return nil;
     return [UIColor colorWithRed:((rgb >> 16) & 0xFF) / 255.0 green:((rgb >> 8) & 0xFF) / 255.0 blue:(rgb & 0xFF) / 255.0 alpha:1];
 }
 
-static BOOL lookBlack(void) {
-    return EeveeRedesignedUI() || EeveeFlag(kAmoledKey, NO);
-}
-
+// The accent the switches are tinted with, which with nothing picked is 0x1ED760 — the colour
+// EeveeSpotify's own SwiftUI rows are tinted with — so a switch here and a Toggle there match.
 UIColor *EeveeGreen(void) { return lookAccent() ?: [UIColor colorWithRed:0x1E / 255.0 green:0xD7 / 255.0 blue:0x60 / 255.0 alpha:1]; }
 UIColor *EeveeRed(void) { return [UIColor colorWithRed:0xF1 / 255.0 green:0x5E / 255.0 blue:0x6B / 255.0 alpha:1]; }
-UIColor *EeveePageBackground(void) { return lookBlack() ? UIColor.blackColor : [UIColor colorWithWhite:0x12 / 255.0 alpha:1]; }
-// Spotify's own elevated grey on its dark grey; iOS's own card grey on the AMOLED black.
-UIColor *EeveeCardBackground(void) { return [UIColor colorWithWhite:(lookBlack() ? 0x1C : 0x2A) / 255.0 alpha:1]; }
+// Spotify's own dark page, which is what a SwiftUI List sits on in this app. AMOLED is EeveeSpotify's
+// own theme now (AmoledTheme.x.swift), which blacks these surfaces out itself.
+UIColor *EeveePageBackground(void) { return [UIColor colorWithWhite:0x12 / 255.0 alpha:1]; }
+// The card SwiftUI's grouped List puts a section in, rather than a guess at it: the old 0x2A was
+// lighter than anything iOS draws, so a ported card stood out from an EeveeSpotify one above it.
+UIColor *EeveeCardBackground(void) { return UIColor.secondarySystemGroupedBackgroundColor; }
 
 UIImage *EeveeTileImage(NSString *symbol) {
     UIImageSymbolConfiguration *config = [UIImageSymbolConfiguration configurationWithPointSize:14 weight:UIImageSymbolWeightMedium];
@@ -103,24 +111,26 @@ UIImage *EeveeTileImage(NSString *symbol) {
     return [tile imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
 }
 
-const CGFloat EeveeSectionHeaderHeight = 38;
+// iOS's own inset-grouped header metrics, which is what SwiftUI's grouped List draws on an iPhone:
+// 32pt tall with the label 16pt down from the card above it.
+const CGFloat EeveeSectionHeaderHeight = 32;
 const CGFloat EeveeSectionGap = 20;
 
-// Every page below draws Spotify's own list row: a 13pt white title over an 11pt grey subtitle,
-// with an optional symbol in the leading slot.
+// Every page below draws the list row SwiftUI draws: a 17pt .label title over a 13pt .secondaryLabel
+// subtitle, with an optional symbol in the leading slot.
 void EeveeFillCell(UITableViewCell *cell, NSString *title, NSString *subtitle, UIColor *color, NSString *symbolName) {
     UIListContentConfiguration *content = [UIListContentConfiguration subtitleCellConfiguration];
     content.text = title;
     content.secondaryText = subtitle;
     content.textProperties.font = EeveeTitleFont();
-    content.textProperties.color = color ?: UIColor.whiteColor;
+    content.textProperties.color = color ?: UIColor.labelColor;
     content.secondaryTextProperties.font = EeveeSubtitleFont();
     content.secondaryTextProperties.color = EeveeGrey();
-    content.textToSecondaryTextVerticalPadding = 0;
+    content.textToSecondaryTextVerticalPadding = 2;
     content.directionalLayoutMargins = NSDirectionalEdgeInsetsMake(10, 16, 10, 16);
     if (symbolName) {
         content.image = [UIImage systemImageNamed:symbolName withConfiguration:[UIImageSymbolConfiguration configurationWithPointSize:15 weight:UIImageSymbolWeightRegular]];
-        content.imageProperties.tintColor = color ?: UIColor.whiteColor;
+        content.imageProperties.tintColor = color ?: UIColor.labelColor;
         content.imageToTextPadding = 14;
     }
     cell.contentConfiguration = content;
@@ -129,12 +139,15 @@ void EeveeFillCell(UITableViewCell *cell, NSString *title, NSString *subtitle, U
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 
+// As written, not uppercased: SwiftUI's Section(header:) shows the title it is given, and every
+// EeveeSpotify page writes its headers in sentence case. Uppercasing here was the loudest difference
+// between a ported page and EeveeSpotify's own — "APPEARANCE" over "UI & Liquid Glass Adjustments".
 UIView *EeveeSectionHeader(UITableView *table, NSString *title) {
     UILabel *label = [UILabel new];
-    label.text = title.uppercaseString;
+    label.text = title;
     label.font = EeveeSubtitleFont();
     label.textColor = EeveeGrey();
-    label.frame = CGRectMake(16, 20, table.bounds.size.width - 32, 14);
+    label.frame = CGRectMake(16, 14, table.bounds.size.width - 32, 16);
     label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, table.bounds.size.width, EeveeSectionHeaderHeight)];
     [header addSubview:label];
@@ -171,25 +184,6 @@ CGFloat EeveeSectionFooterHeight(UITableView *table, NSString *text) {
 UITableViewCell *EeveeDequeueCell(UITableView *table, NSString *identifier) {
     return [table dequeueReusableCellWithIdentifier:identifier]
         ?: [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
-}
-
-static CGFloat brightness(UIColor *color) {
-    CGFloat white = 0;
-    [color getWhite:&white alpha:NULL];
-    return white;
-}
-
-// Spotify's list labels carry its typeface: 13pt titles and 11pt grey subtitles.
-void EeveeAdoptFonts(UIView *list, UIView *row) {
-    if (eevee_titleFont && eevee_subtitleFont) return;
-    EeveeForEachView(list, ^(UIView *v) {
-        if (![v isKindOfClass:UILabel.class] || EeveeIsInside(v, row)) return;
-        UILabel *label = (UILabel *)v;
-        if (label.text.length < 2) return;
-        CGFloat size = label.font.pointSize, white = brightness(label.textColor);
-        if (size == 13 && !eevee_titleFont) eevee_titleFont = label.font;
-        if (size == 11 && !eevee_subtitleFont && white > 0.3 && white < 0.95) eevee_subtitleFont = label.font;
-    });
 }
 
 UIViewController *EeveeTopController(void) {

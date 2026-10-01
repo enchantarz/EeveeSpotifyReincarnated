@@ -29,7 +29,7 @@ UIViewController *EeveeNavbarPage(void) {
     return EeveeNavbarSettingsPage();
 }
 
-// spoti.pw's own lyrics engine (Shared/Lyrics*, Redesigned/Lyrics, Native/Lyrics) was dropped in
+// spoti.pw's own lyrics engine (Shared/Lyrics*, Native/Lyrics) was dropped in
 // the merge: EeveeSpotify already ships one, so its settings live under EeveeSpotify's own
 // Lyrics section rather than as a page here.
 

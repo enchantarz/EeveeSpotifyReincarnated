@@ -8,9 +8,8 @@
 //     HapticsSettings.m    the Vibrations cards, with each switch's strength and what Music Haptics follows
 //
 // Everything on them applies at once, without a restart. Everything hooked is Spotify's own (its controls
-// by accessibility identifier, its scrubber, its cover and title lists, its audio unit), so all of it works
-// on Spotify's own screens and on the redesign's alike. The redesigned lyrics page's tap to seek plays its
-// feedback from Redesigned/Lyrics/EeveeRKaraokeView.m.
+// by accessibility identifier, its scrubber, its cover and title lists, its audio unit), so all of it
+// works on Spotify's own screens.
 // Threading: main thread only.
 #import <UIKit/UIKit.h>
 

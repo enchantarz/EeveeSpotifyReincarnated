@@ -57,6 +57,20 @@ struct EeveeUISettingsView: View {
                     )
                 )
             }
+
+            // The AMOLED Black Theme (AmoledTheme.x.swift). Moved here from spoti.pw's Appearance
+            // card, whose Amoled.x was removed; this one hooks UIView's background setter instead.
+            Section(
+                footer: Text("restart_is_required_description".localized)
+            ) {
+                Toggle(
+                    "amoled_theme".localized,
+                    isOn: Binding<Bool>(
+                        get: { UserDefaults.amoledTheme },
+                        set: { UserDefaults.amoledTheme = $0 }
+                    )
+                )
+            }
             
             SpacerView()
         }

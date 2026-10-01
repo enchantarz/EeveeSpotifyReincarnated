@@ -98,3 +98,24 @@ unknown_error = "알 수 없는 오류";
 
 song_is_instrumental = "이 노래는 악기전용 노래입니다.";
 let_the_music_play = "음악이 재생되게 놔두세요...";
+
+// Ported features: the SpicyLyrics karaoke view, the AMOLED black theme, the Jam/rating
+// toggles, Hysan's recovery fund, and the app-icon picker.
+spicylyrics_description = "SpicyLyrics는 단어별 가라오케 가사를 제공합니다.";
+spicylyrics_key_missing = "SpicyLyrics API 키 없음";
+spicylyrics_key_invalid = "SpicyLyrics API 키가 거부됨";
+karaoke_word_synced_button = "커스텀 가사 보기";
+amoled_theme = "AMOLED 블랙 테마";
+hide_jam_from_menu = "메뉴에서 Jam 숨기기";
+hide_jam_from_menu_description = "트랙/재생목록 컨텍스트 메뉴, 기기 선택기, 대기열에서 \"Jam 시작\"을 제거합니다.";
+block_rating_dialogs = "앱 평가 대화상자 차단";
+block_rating_dialogs_description = "App Store 별점 요청과 앱 내 리뷰 요청을 표시하지 않습니다.";
+hysan_recovery_fund = "Hysan의 Elsa 회복 기금";
+hysan_recovery_fund_description = "Hysan은 2026년부터 Elsa에게 반해 그 얘기를 끊임없이 합니다. 여기의 커피 한 잔이 그의 회복과 모드를 지원합니다. ☕";
+appIconTitle = "아이콘 선택";
+appIconSubtitle = "처음에는 iOS가 확인을 표시합니다. 홈 화면이 새로고침되는 데 몇 초가 걸릴 수 있습니다.";
+appIconUnavailableMessage = "이 Spotify는 App Store에서 설치되어 iOS가 홈 화면 아이콘을 앱의 서명된 번들 안에 유지하며 모드가 변경하지 못하게 합니다. 아이콘이 등록된 상태로 서명된 EeveeSpotify의 패치된 IPA를 설치하면 변경이 작동합니다.";
+iconSelected = "선택됨";
+iconTapToApply = "탭하여 적용";
+prettifyIconNames = "아이콘 이름 예쁘게 표시";
+prettifyIconNamesDescription = "밑줄, 하이픈, camelCase를 공백으로 변환합니다";

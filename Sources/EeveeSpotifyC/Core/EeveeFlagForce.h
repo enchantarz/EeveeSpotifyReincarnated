@@ -1,6 +1,7 @@
 // The flags something of the mod's forces, gathered in one place so that the flag provider
-// (Shared/Flags/Flags.x) and the flag rows of the settings pages (Settings/EeveeModPage.m) ask here
-// rather than knowing every feature that forces one: the ad blocking, the lyrics sources, the redesign.
+// (Shared/Flags/Flags.x) and the flag rows of the settings pages ask here rather than knowing every
+// feature that forces one. Nothing registers a forcer in this build — the redesign's went with it —
+// so the provider reads only the All flags page's own overrides.
 //
 // A forcer answers a flag key with the value it forces, or nil. `atLaunch` answers for the running
 // app, from the switches as they were at launch; `locked`, which may be nil, answers for a settings

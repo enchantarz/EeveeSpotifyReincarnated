@@ -34,8 +34,8 @@ UIViewController *EeveeLabsPage(void) {
             EeveeFlagRow(@"Progress bar", @"ios-widgets-widgetremoteconfig-impl.progress_bar_enabled"),
         ]),
         // The note that stood here said the options sheet was always on in the redesign, which used
-        // to force the flag (EeveeRGlassDesign.x). The redesign is not part of this build, so nothing
-        // forces it and the row is an ordinary one.
+        // to force the flag. The redesign was removed in the merge, so nothing forces it and the row
+        // is an ordinary one.
         EeveeSection(@"Sleep timer", @[
             EeveeFlagRow(@"Fade out", @"ios-feature-sleeptimer.enable_fade_out"),
             EeveeFlagRow(@"One minute option", @"ios-feature-sleeptimer.enable_one_minute_option"),

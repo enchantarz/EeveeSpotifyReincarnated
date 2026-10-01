@@ -49,6 +49,31 @@ class BundleHelper {
         return nil
     }
     
+    /// The contributors shipped inside the tweak, so the contributors sheet has something to draw
+    /// even when the build's own branch is not on GitHub (the network copy is fetched from
+    /// "refs/heads/<branch>", and a branch that only ever existed locally 404s). GitHubHelper falls
+    /// back to this when every fetch fails.
+    var bundledContributorsJSON: Data? {
+        guard let bundle = self.bundle,
+              let url = bundle.url(forResource: "contributors", withExtension: "json") else { return nil }
+        return try? Data(contentsOf: url)
+    }
+
+    /// Where the Makefile stages Assets/AppIcon — the alternate app icons — inside the tweak
+    /// bundle. A stock App Store install has no CFBundleAlternateIcons of its own for iOS's icon
+    /// switcher, so EeveeAppIconPickerView lists the choices from here instead.
+    var appIconsDirectoryURL: URL? {
+        guard let bundle = self.bundle else { return nil }
+        if let url = bundle.url(forResource: "AppIcons", withExtension: nil) { return url }
+        return bundle.resourceURL?.appendingPathComponent("AppIcons")
+    }
+
+    /// One sized icon file out of AppIcons/, by its stem plus scale suffix ("Eevify@2x").
+    func appIconImage(named stem: String) -> UIImage? {
+        guard let dir = appIconsDirectoryURL else { return nil }
+        return UIImage(contentsOfFile: dir.appendingPathComponent(stem + ".png").path)
+    }
+
     func localizedString(_ key: String) -> String {
         guard let bundle = self.bundle else { return key }
 

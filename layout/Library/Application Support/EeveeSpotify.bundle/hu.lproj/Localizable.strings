@@ -113,3 +113,24 @@ contributors = "Hozzájárulók";
 
 request_anonymous_token = "Névtelen token kérése";
 request_anonymous_token_description = "Érintse meg a „Névtelen token kérése” lehetőséget, ha engedély nélkül szeretne tokent kérni a Musixmatch-től.";
+
+// Ported features: the SpicyLyrics karaoke view, the AMOLED black theme, the Jam/rating
+// toggles, Hysan's recovery fund, and the app-icon picker.
+spicylyrics_description = "A SpicyLyrics szavankénti karaoke dalszöveget biztosít.";
+spicylyrics_key_missing = "Nincs SpicyLyrics API-kulcs";
+spicylyrics_key_invalid = "A SpicyLyrics API-kulcs elutasítva";
+karaoke_word_synced_button = "Egyéni dalszöveg-nézet";
+amoled_theme = "AMOLED fekete téma";
+hide_jam_from_menu = "Jam elrejtése a menüből";
+hide_jam_from_menu_description = "Eltávolítja a \"Jam indítása\" elemet a szám/lejátszási lista helyi menüiből, az eszközválasztóból és a sorból.";
+block_rating_dialogs = "Alkalmazás-értékelő párbeszédablakok tiltása";
+block_rating_dialogs_description = "Elnyeli az App Store csillagos értékelésre való felkéréseit és az alkalmazáson belüli véleménykéréseket.";
+hysan_recovery_fund = "Hysan Elsa-felépülési alapja";
+hysan_recovery_fund_description = "Hysan 2026 óta odavan Elzáért, és nem hagyja abba a beszédet róla. Minden kávé itt az ő felépülését — és a modot — finanszírozza. ☕";
+appIconTitle = "Ikon kiválasztása";
+appIconSubtitle = "Az iOS először megerősítést jelenít meg. A kezdőképernyő frissítése eltarthat néhány másodpercig.";
+appIconUnavailableMessage = "Ezt a Spotifyt az App Storeból telepítették, ezért az iOS a kezdőképernyő ikonját az alkalmazás aláírt csomagjában tartja, és nem engedi a modnak megváltoztatni. Telepítsd az EeveeSpotify javított IPA-összeállítását — a regisztrált ikonokkal aláírva —, és a váltás működni fog.";
+iconSelected = "Kiválasztva";
+iconTapToApply = "Koppints az alkalmazáshoz";
+prettifyIconNames = "Ikonnevek szépítése";
+prettifyIconNamesDescription = "Az aláhúzásokat, kötőjeleket és a camelCase-et szóközökké alakítja";

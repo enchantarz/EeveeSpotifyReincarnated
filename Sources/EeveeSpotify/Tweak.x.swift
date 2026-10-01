@@ -293,6 +293,12 @@ struct EeveeSpotify: Tweak {
         // Spotify 9.1.x. Each target is runtime-gated for minor-version safety.
         activateUpsellServiceBlocker()
 
+        // Block app star rating dialogs and in-app review requests.
+        activateRatingDialogBlocker()
+
+        // Hide Jam from menus, device picker, and queue.
+        activateHideJamFromMenu()
+
         // Block ClientMessagingPlatform marketing surfaces (9.1.84 win-back
         // fullscreen takeover and Home Premium banner) and their element views.
         activateClientMessagingPlatformBlocker()
@@ -310,6 +316,11 @@ struct EeveeSpotify: Tweak {
         // private subclass whose overridden setters would otherwise bypass base-class
         // swizzles. Installed unconditionally; cleaning is gated per-call by the toggle.
         PasteboardConcreteSwizzler.install()
+
+        // Activate before the Spotify 9.1.x-specific path, which returns early
+        // later in this initializer. The setting is read at launch because Orion
+        // hook groups cannot be deactivated safely in the running process.
+        activateAmoledTheme()
 
         // Activate session logout protection first.
         // NOTE: On some Spotify 9.1.x builds, Orion can still crash even if a selector exists
@@ -336,9 +347,6 @@ struct EeveeSpotify: Tweak {
 
         // CarPlay crash fix (Issue #16) — safe-gated
         activateCarPlayCrashFix()
-
-        // Hysan's Elsa Recovery Fund: tappable donation toast on 5th launch
-        Donation.activate()
 
         // Verify critical hook targets exist
         let hookTargets: [(String, String)] = [

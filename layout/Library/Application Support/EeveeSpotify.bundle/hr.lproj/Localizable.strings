@@ -115,3 +115,24 @@ request_anonymous_token = "Zatraži anonimni token";
 request_anonymous_token_description = "Dodirnite 'Zatraži anonimni token' za zahtjev tokena od Musixmatcha bez autorizacije.";
 
 lrclib_api = "Adresa poslužitelja";
+
+// Ported features: the SpicyLyrics karaoke view, the AMOLED black theme, the Jam/rating
+// toggles, Hysan's recovery fund, and the app-icon picker.
+spicylyrics_description = "SpicyLyrics pruža karaoke tekstove riječ po riječ.";
+spicylyrics_key_missing = "Nema SpicyLyrics API ključa";
+spicylyrics_key_invalid = "SpicyLyrics API ključ odbijen";
+karaoke_word_synced_button = "Prikaz vlastitih tekstova";
+amoled_theme = "AMOLED crna tema";
+hide_jam_from_menu = "Sakrij Jam iz izbornika";
+hide_jam_from_menu_description = "Uklanja \"Započni Jam\" iz kontekstnih izbornika pjesme/popisa za reprodukciju, odabira uređaja i reda čekanja.";
+block_rating_dialogs = "Blokiraj dijaloške okvire ocjena";
+block_rating_dialogs_description = "Potiskuje App Store upite za zvjezdice i upite za recenziju u aplikaciji.";
+hysan_recovery_fund = "Hysanov fond za oporavak zbog Else";
+hysan_recovery_fund_description = "Hysan je od 2026. zaljubljen u Elsu i ne prestaje o tome pričati. Svaka kava ovdje financira njegov oporavak — i mod. ☕";
+appIconTitle = "Odaberi ikonu";
+appIconSubtitle = "iOS će prvi put pokazati potvrdu. Početnom zaslonu može trebati nekoliko sekundi za osvježavanje.";
+appIconUnavailableMessage = "Ovaj Spotify je instaliran iz App Storea, pa iOS drži njegovu ikonu početnog zasluna unutar potpisanog paketa aplikacije i ne dopušta modu da je promijeni. Instalirajte zakrpljenu IPA verziju EeveeSpotifyja — potpisanu s registriranim ikonama — i zamjena radi.";
+iconSelected = "Odabrano";
+iconTapToApply = "Dodirnite za primjenu";
+prettifyIconNames = "Uljepšaj nazive ikona";
+prettifyIconNamesDescription = "Pretvara podcrtaje, crtice i camelCase u razmake";

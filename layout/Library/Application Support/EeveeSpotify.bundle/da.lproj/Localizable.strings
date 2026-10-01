@@ -139,3 +139,24 @@ play_songs_in_any_order = "Afspil sange i den rækkefølge, du foretrækker";
 organize_listening_queue = "Rediger rækkefølgen på afspilningskøen";
 
 payment_notice = "EeveeSpotify tilføjer patches for at låse op for visse Premium-funktioner. Dette er gratis.";
+
+// Ported features: the SpicyLyrics karaoke view, the AMOLED black theme, the Jam/rating
+// toggles, Hysan's recovery fund, and the app-icon picker.
+spicylyrics_description = "SpicyLyrics leverer karaoke-tekst ord for ord.";
+spicylyrics_key_missing = "Ingen SpicyLyrics API-nøgle";
+spicylyrics_key_invalid = "SpicyLyrics API-nøgle afvist";
+karaoke_word_synced_button = "Brugerdefineret sangtekstvisning";
+amoled_theme = "AMOLED sort tema";
+hide_jam_from_menu = "Skjul Jam fra menuen";
+hide_jam_from_menu_description = "Fjerner \"Start en Jam\" fra genvejsmenuer for numre/afspilningslister, enhedsvælgeren og køen.";
+block_rating_dialogs = "Bloker app-vurderingsdialoger";
+block_rating_dialogs_description = "Undertrykker App Stores stjernevurderingsanmodninger og anmodninger om anmeldelse i appen.";
+hysan_recovery_fund = "Hysans Elsa-genopretningsfond";
+hysan_recovery_fund_description = "Hysan har været forelsket i Elsa siden 2026 og holder ikke op med at tale om det. Enhver kop kaffe her finansierer hans genopretning — og modden. ☕";
+appIconTitle = "Vælg ikon";
+appIconSubtitle = "iOS viser en bekræftelse første gang. Hjemmeskærmen kan tage et par sekunder om at opdatere.";
+appIconUnavailableMessage = "Denne Spotify blev installeret fra App Store, så iOS holder sit hjemmeskærm-ikon inde i appens signede bundle og lader ikke mod ændre det. Installer en patched IPA-build af EeveeSpotify — signeret med ikonerne registreret — så skiftet virker.";
+iconSelected = "Valgt";
+iconTapToApply = "Tryk for at anvende";
+prettifyIconNames = "Gør ikonnavne pæne";
+prettifyIconNamesDescription = "Konverterer understregninger, bindestreger og camelCase til mellemrum";

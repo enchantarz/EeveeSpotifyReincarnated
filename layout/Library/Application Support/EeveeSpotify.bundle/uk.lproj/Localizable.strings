@@ -138,3 +138,24 @@ play_songs_in_any_order = "Слухайте треки в будь-якому п
 organize_listening_queue = "Керування чергою прослуховування";
 
 payment_notice = "EeveeSpotify застосовує патчі, щоб розблокувати деякі функції Premium. Це безкоштовно.";
+
+// Ported features: the SpicyLyrics karaoke view, the AMOLED black theme, the Jam/rating
+// toggles, Hysan's recovery fund, and the app-icon picker.
+spicylyrics_description = "SpicyLyrics надає караоке-текст слово за словом.";
+spicylyrics_key_missing = "Немає API-ключа SpicyLyrics";
+spicylyrics_key_invalid = "API-ключ SpicyLyrics відхилено";
+karaoke_word_synced_button = "Власний перегляд тексту пісні";
+amoled_theme = "Чорна тема AMOLED";
+hide_jam_from_menu = "Сховати Jam із меню";
+hide_jam_from_menu_description = "Прибирає \"Почати Jam\" з контекстних меню треку/плейліста, вибору пристрою і черги.";
+block_rating_dialogs = "Блокувати діалоги оцінювання";
+block_rating_dialogs_description = "Пригнічує запити зірочного рейтингу App Store і вбудовані запити відгуку.";
+hysan_recovery_fund = "Фонд одужання Гайсана через Ельзу";
+hysan_recovery_fund_description = "Гайсан закоханий в Ельзу з 2026 року й без зупинки про це говорить. Кожна кава тут оплачує його одужання — і мод. ☕";
+appIconTitle = "Вибрати значок";
+appIconSubtitle = "iOS покаже підтвердження вперше. Домашньому екрану може знадобитися кілька секунд на оновлення.";
+appIconUnavailableMessage = "Цей Spotify установлено з App Store, тому iOS тримає його значок екрана «Домів» у підписаному пакеті програми і не дозволяє моду змінити його. Установіть виправлену IPA-збірку EeveeSpotify — підписану із зареєстрованими значками — і заміна запрацює.";
+iconSelected = "Вибрано";
+iconTapToApply = "Торкніться, щоб застосувати";
+prettifyIconNames = "Прикрасити назви значків";
+prettifyIconNamesDescription = "Перетворює підкреслення, дефіси та camelCase на пробіли";

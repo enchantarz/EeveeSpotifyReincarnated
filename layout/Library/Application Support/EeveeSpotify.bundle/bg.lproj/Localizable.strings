@@ -99,3 +99,24 @@ unknown_error = "Неизвестна грешка";
 
 song_is_instrumental = "Тази песен е инструментална.";
 let_the_music_play = "Нека музиката звучи...";
+
+// Ported features: the SpicyLyrics karaoke view, the AMOLED black theme, the Jam/rating
+// toggles, Hysan's recovery fund, and the app-icon picker.
+spicylyrics_description = "SpicyLyrics предоставя караоке текст дума по дума.";
+spicylyrics_key_missing = "Няма API ключ за SpicyLyrics";
+spicylyrics_key_invalid = "API ключът за SpicyLyrics е отхвърлен";
+karaoke_word_synced_button = "Изглед с персонализиран текст";
+amoled_theme = "Черна тема AMOLED";
+hide_jam_from_menu = "Скрий Jam от менюто";
+hide_jam_from_menu_description = "Премахва \"Започни Jam\" от контекстните менюта на трак/плейлист, от избора на устройство и от опашката.";
+block_rating_dialogs = "Блокирай диалогите за оценка";
+block_rating_dialogs_description = "Потиска исканията за звезден рейтинг от App Store и исканията за преглед в приложението.";
+hysan_recovery_fund = "Фонд за възстановяване на Хисан заради Елза";
+hysan_recovery_fund_description = "Хисан е влюбен в Елза от 2026 г. и не спира да говори за това. Всяко кафе тук финансира възстановяването му — и мода. ☕";
+appIconTitle = "Изберете икона";
+appIconSubtitle = "iOS показва потвърждение при първия път. Началният екран може да отнеме няколко секунди за обновяване.";
+appIconUnavailableMessage = "Този Spotify е инсталиран от App Store, затова iOS пази иконата му на началния екран в подписания пакет на приложението и не позволява на мода да я променя. Инсталирайте кръпена IPA компилация на EeveeSpotify — подписана с регистрираните икони — и смяната работи.";
+iconSelected = "Избрано";
+iconTapToApply = "Докоснете за прилагане";
+prettifyIconNames = "Хубави имена на икони";
+prettifyIconNamesDescription = "Превръща долни черти, тирета и camelCase в интервали";
